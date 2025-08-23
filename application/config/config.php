@@ -23,7 +23,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = '';
+$config['base_url'] = 'https://stima.unma.ac.id/';
 
 /*
 |--------------------------------------------------------------------------
@@ -35,7 +35,7 @@ $config['base_url'] = '';
 | variable so that it is blank.
 |
 */
-$config['index_page'] = 'index.php';
+$config['index_page'] = '';
 
 /*
 |--------------------------------------------------------------------------
@@ -102,7 +102,7 @@ $config['charset'] = 'UTF-8';
 | setting this variable to TRUE (boolean).  See the user guide for details.
 |
 */
-$config['enable_hooks'] = FALSE;
+$config['enable_hooks'] = TRUE;
 
 /*
 |--------------------------------------------------------------------------
@@ -138,7 +138,7 @@ $config['subclass_prefix'] = 'MY_';
 | Note: This will NOT disable or override the CodeIgniter-specific
 |	autoloading (application/config/autoload.php)
 */
-$config['composer_autoload'] = FALSE;
+$config['composer_autoload'] = '../stima_core/vendor/autoload.php';
 
 /*
 |--------------------------------------------------------------------------
@@ -326,7 +326,7 @@ $config['cache_query_string'] = FALSE;
 | https://codeigniter.com/userguide3/libraries/encryption.html
 |
 */
-$config['encryption_key'] = '';
+$config['encryption_key'] = 'n3yh2rhpgCkyyok9HgYFpBYwpI1o4Rs9';
 
 /*
 |--------------------------------------------------------------------------
@@ -384,7 +384,7 @@ $config['encryption_key'] = '';
 |
 */
 $config['sess_driver'] = 'files';
-$config['sess_cookie_name'] = 'ci_session';
+$config['sess_cookie_name'] = 'stima_core';
 $config['sess_samesite'] = 'Lax';
 $config['sess_expiration'] = 7200;
 $config['sess_save_path'] = NULL;
@@ -497,7 +497,7 @@ $config['compress_output'] = FALSE;
 | helper' page of the user guide for information regarding date handling.
 |
 */
-$config['time_reference'] = 'local';
+$config['time_reference'] = 'Asia/Jakarta';
 
 /*
 |--------------------------------------------------------------------------
