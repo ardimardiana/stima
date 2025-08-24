@@ -115,6 +115,30 @@
             </div>
 
             <aside class="col-lg-4">
+                <?php if (!empty($schedule)): ?>
+                <div class="card shadow-sm mb-4 text-white bg-success">
+                    <div class="card-header"><h5 class="mb-0"><i class="fas fa-calendar-check me-2"></i>Jadwal Presentasi Anda</h5></div>
+                    <div class="card-body">
+                        <ul class="list-unstyled mb-0">
+                            <li>
+                                <strong><i class="fas fa-clock fa-fw me-2"></i>Waktu:</strong><br>
+                                <?= date('d F Y', strtotime($schedule->waktu_mulai)); ?>, Pukul <?= date('H:i', strtotime($schedule->waktu_mulai)); ?> - <?= date('H:i', strtotime($schedule->waktu_selesai)); ?> WIB
+                            </li>
+                            <hr class="my-2 bg-white">
+                            <li>
+                                <strong><i class="fas fa-door-open fa-fw me-2"></i>Ruangan:</strong><br>
+                                <?= htmlspecialchars($schedule->nama_ruang, ENT_QUOTES, 'UTF-8'); ?>
+                            </li>
+                            <?php if(!empty($schedule->lokasi)): ?>
+                            <li>
+                                <strong><i class="fas fa-map-marker-alt fa-fw me-2"></i>Lokasi:</strong><br>
+                                <?= htmlspecialchars($schedule->lokasi, ENT_QUOTES, 'UTF-8'); ?>
+                            </li>
+                            <?php endif; ?>
+                        </ul>
+                    </div>
+                </div>
+                <?php endif; ?>
                 <div class="card shadow-sm mb-4">
                     <div class="card-header"><h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Status & Aksi</h5></div>
                     <div class="card-body">

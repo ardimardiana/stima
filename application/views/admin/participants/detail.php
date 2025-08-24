@@ -4,6 +4,13 @@
         <li class="breadcrumb-item">...</li>
         <li class="breadcrumb-item active">Detail</li>
     </ol>
+    
+    <?php if($this->session->flashdata('success')): ?>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <?= $this->session->flashdata('success'); ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <?php endif; ?>
 
     <div class="card">
         <div class="card-header">

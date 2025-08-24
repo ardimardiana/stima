@@ -198,11 +198,13 @@ class Article extends User_Controller {
         $data['reviews'] = [];
         $data['authors'] = [];
         $data['chats'] = [];
+        $data['schedule'] = null;
         
         if ($data['paper']) {
             $data['chats'] = $this->Chat_model->get_messages($data['paper']->paper_id);
             $data['reviews'] = $this->Article_model->get_reviews_by_paper($data['paper']->paper_id);
             $data['authors'] = $this->Article_model->get_authors_by_paper($data['paper']->paper_id);
+            $data['schedule'] = $this->Article_model->get_schedule_by_paper($data['paper']->paper_id);
         }
     
         $this->load->view('user/article/index', $data);

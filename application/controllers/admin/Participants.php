@@ -41,19 +41,72 @@ class Participants extends Admin_Controller {
         $payment_id = $this->input->post('payment_id');
         $action = $this->input->post('action'); // 'lunas' atau 'ditolak'
         $admin_id = $this->session->userdata('user_id');
-
+    
         $payment = $this->Participant_model->get_payment_detail($payment_id);
         
         if ($action == 'lunas') {
-            $this->Payment_model->set_payment_status($payment_id, 'lunas', $admin_id); // Asumsi fungsi ini ada
+            $this->Payment_model->set_payment_status($payment_id, 'lunas', $admin_id);
             $this->_generate_qr_code($payment->registration_id);
-            $this->session->set_flashdata('success', 'Pembayaran berhasil divalidasi.');
-        } else {
+    
+            // -- PANGGIL FUNGSI EMAIL --
+            $this->_send_payment_notification_email($payment, 'lunas');
+    
+            $this->session->set_flashdata('success', 'Pembayaran berhasil divalidasi. Notifikasi telah dikirim ke peserta.');
+    
+        } else { // 'ditolak'
             $this->Payment_model->set_payment_status($payment_id, 'ditolak', $admin_id);
-            $this->session->set_flashdata('warning', 'Pembayaran telah ditolak.');
+            
+            // -- PANGGIL FUNGSI EMAIL --
+            $this->_send_payment_notification_email($payment, 'ditolak');
+    
+            $this->session->set_flashdata('warning', 'Pembayaran telah ditolak. Notifikasi telah dikirim ke peserta.');
         }
-
+    
         redirect('admin/participants/index/' . $payment->event_id);
+    }
+    
+    private function _send_payment_notification_email($payment_data, $status) {
+        $config = Array(
+			'mailtype'  => 'html', 
+			'charset'   => 'iso-8859-1'
+		);
+		$this->load->library('email', $config);
+    
+        $recipient_email = $payment_data->email;
+        $recipient_name = $payment_data->nama_depan;
+        $event_name = $payment_data->nama_event;
+        $invoice_number = $payment_data->nomor_invoice;
+    
+        $subject = '';
+        $message = "Halo {$recipient_name},<br><br>";
+        $message .= "Kami memberitahukan status terbaru untuk pembayaran Anda (Invoice: <strong>{$invoice_number}</strong>) untuk acara <strong>{$event_name}</strong>.<br><br>";
+    
+        // Tentukan isi email berdasarkan status
+        if ($status == 'lunas') {
+            $subject = 'Pembayaran Anda Telah Dikonfirmasi';
+            $message .= "<div style='padding:15px; border-left: 5px solid #198754; background-color:#e9f7ef;'>";
+            $message .= "<strong>Status: LUNAS</strong><br>";
+            $message .= "Terima kasih, pembayaran Anda telah kami verifikasi. QR Code untuk kehadiran kini telah tersedia di dasbor Anda.";
+            $message .= "</div>";
+        } else { // 'ditolak'
+            $subject = 'Informasi Mengenai Pembayaran Anda';
+            $message .= "<div style='padding:15px; border-left: 5px solid #dc3545; background-color:#fbe9ea;'>";
+            $message .= "<strong>Status: DITOLAK</strong><br>";
+            $message .= "Mohon maaf, pembayaran Anda tidak dapat kami verifikasi saat ini. Kemungkinan penyebabnya adalah bukti transfer tidak jelas, jumlah tidak sesuai, atau lainnya.<br>";
+            $message .= "Silakan login kembali ke dasbor Anda untuk mengunggah ulang bukti pembayaran yang benar.";
+            $message .= "</div>";
+        }
+        
+        $dashboard_link = site_url('user/dashboard');
+        $message .= "<br>Silakan akses dasbor Anda melalui tautan berikut:<br>";
+        $message .= "<a href='{$dashboard_link}'>{$dashboard_link}</a><br><br>";
+        $message .= "Hormat kami,<br>Panitia Penyelenggara";
+    
+        $this->email->from('no-reply@stima.unma.ac.id', 'Panitia ' . $event_name);
+        $this->email->to($recipient_email);
+        $this->email->subject($subject);
+        $this->email->message($message);
+        $this->email->send();
     }
     
     private function _generate_qr_code($registration_id) {

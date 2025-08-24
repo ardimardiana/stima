@@ -10,13 +10,6 @@
     
     <a href="<?= site_url('admin/announcements/create/' . $event->event_id) ?>" class="btn btn-primary mb-3"><i class="fas fa-plus"></i> Buat Pengumuman Baru</a>
     
-    <?php if($this->session->flashdata('success')): ?>
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <?= $this->session->flashdata('success'); ?>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    <?php endif; ?>
-
     <div class="card mb-4">
         <div class="card-header"><i class="fas fa-bullhorn me-1"></i> Daftar Pengumuman</div>
         <div class="card-body">

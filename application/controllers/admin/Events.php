@@ -71,6 +71,7 @@ class Events extends Admin_Controller {
     }
     
     public function edit($event_id) {
+        
         $this->form_validation->set_rules('nama_event', 'Nama Event', 'required');
         $this->form_validation->set_rules('tahun', 'Tahun', 'required|numeric');
         $this->form_validation->set_rules('slug_url', 'Slug URL', 'required|alpha_dash');
@@ -99,6 +100,7 @@ class Events extends Admin_Controller {
     
             // 2. Cek apakah ada file header baru yang diunggah
             if (!empty($_FILES['header_loa']['name'])) {
+                
                 $config['upload_path']   = './uploads/loa_headers/';
                 $config['allowed_types'] = 'jpg|png|jpeg';
                 $config['max_size']      = 2048; // 2MB

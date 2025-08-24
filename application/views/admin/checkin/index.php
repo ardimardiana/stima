@@ -53,7 +53,7 @@
                 setTimeout(() => {
                     alertPlaceholder.innerHTML = ''; // Hapus pesan
                     html5QrcodeScanner.resume();
-                }, 2000);
+                }, 5000);
             }
         });
     }

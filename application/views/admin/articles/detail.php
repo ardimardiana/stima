@@ -5,6 +5,13 @@
         <li class="breadcrumb-item"><a href="<?= site_url('admin/articles/index/'.$event->event_id) ?>">Manajemen Artikel</a></li>
         <li class="breadcrumb-item active"><?= htmlspecialchars($paper->judul); ?></li>
     </ol>
+    
+    <?php if($this->session->flashdata('success')): ?>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <?= $this->session->flashdata('success'); ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <?php endif; ?>
 
     <div class="row g-4">
         <div class="col-lg-8">

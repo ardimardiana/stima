@@ -4,6 +4,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Article_model extends CI_Model {
     
     /**
+     * Mengambil data jadwal spesifik untuk sebuah paper.
+     * @param int $paper_id
+     * @return object|null
+     */
+    public function get_schedule_by_paper($paper_id) {
+        $this->db->select('s.nama_sesi, s.waktu_mulai, s.waktu_selesai, r.nama_ruang, r.lokasi');
+        $this->db->from('tbl_schedules s');
+        $this->db->join('tbl_rooms r', 's.room_id = r.room_id');
+        $this->db->where('s.paper_id', $paper_id);
+        return $this->db->get()->row();
+    }
+    
+    /**
      * Mengambil semua data gabungan untuk generate LoA.
      * @param int $paper_id
      * @return object|null

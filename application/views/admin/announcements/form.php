@@ -7,6 +7,13 @@
         <li class="breadcrumb-item active"><?= $title; ?></li>
     </ol>
     
+    <?php if($this->session->flashdata('success')): ?>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <?= $this->session->flashdata('success'); ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <?php endif; ?>
+    
     <div class="card mb-4">
         <div class="card-header"><i class="fas fa-edit me-1"></i> Form Pengumuman</div>
         <div class="card-body">

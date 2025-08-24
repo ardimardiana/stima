@@ -4,7 +4,7 @@
         <li class="breadcrumb-item"><a href="<?= site_url('admin/events') ?>">Manajemen Event</a></li>
         <li class="breadcrumb-item active">Laporan Peserta</li>
     </ol>
-
+    
     <?php $this->load->view('admin/event_manager/_nav'); ?>
     
     <div class="card mb-4">

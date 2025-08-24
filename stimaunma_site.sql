@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Aug 24, 2025 at 03:47 AM
+-- Generation Time: Aug 24, 2025 at 11:05 PM
 -- Server version: 8.0.43
 -- PHP Version: 8.4.10
 
@@ -248,22 +248,11 @@ CREATE TABLE `tbl_users` (
   `afiliasi` varchar(255) DEFAULT NULL,
   `negara` varchar(100) DEFAULT NULL,
   `peran_sistem` enum('admin','user') NOT NULL DEFAULT 'user',
+  `photo_path` varchar(255) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
---
--- Dumping data for table `tbl_users`
---
-
-INSERT INTO `tbl_users` (`user_id`, `nama_depan`, `nama_belakang`, `email`, `password`, `afiliasi`, `negara`, `peran_sistem`, `created_at`, `updated_at`) VALUES
-(1, 'ARDI', 'MARDIANA', 'aim@unma.ac.id', '$2y$10$8KXM7JRukz2BjumfxHXRHuXEs5THUXWrQj5O7LG2N.6jresUJfMxe', 'UNIVERSITAS MAJALENGKA', 'INDONESIA', 'admin', '2025-08-22 07:15:48', '2025-08-22 15:33:41'),
-(2, 'Mawar', 'Melati', 'ardimardiana@gmail.com', '$2y$10$xY.pp2Lm0KRxp08dWkDFYeli0ZzIzIqBGilTGlLlxxGriw692SjFC', 'STIMIK LIKMI BANDUNG', 'Indonesia', 'user', '2025-08-22 15:46:14', '2025-08-23 13:24:35'),
-(3, 'Infotech', 'Journal', 'journalinfotech@gmail.com', '$2y$10$0eyBglRIx5j0VOrROiSRWeSHNBa2GlLrL8vXmpHeQtviMFbgbX1WW', 'Universitas Majalengka', 'Indonesia', 'user', '2025-08-22 16:34:08', '2025-08-22 16:34:08');
-
---
--- Indexes for dumped tables
---
 
 --
 -- Indexes for table `tbl_authors`
