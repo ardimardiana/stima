@@ -4,7 +4,7 @@
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <title><?= isset($title) ? $title : 'Dashboard Admin'; ?> - CMS</title>
+        <title><?= isset($title) ? $title : 'Dashboard Admin'; ?> - <?=$_ENV['SITE_NAME']?></title>
         <link href="<?= base_url('assets/css/styles.css'); ?>" rel="stylesheet" />
         <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.9.1/summernote-bs5.min.css" rel="stylesheet">
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>

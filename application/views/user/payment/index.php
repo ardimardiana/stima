@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $title; ?> - CMS</title>
+    <title><?= $title; ?> - <?=$_ENV['SITE_NAME']?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
 </head>
@@ -49,7 +49,16 @@
                         <div class="alert alert-light border">
                             <strong><i class="fas fa-info-circle me-1"></i> Instruksi Pembayaran:</strong>
                             <hr class="my-2">
-                            Hubungi Panitia.
+<strong>Biaya Pendaftaran:</strong>
+<ul>
+<li>Pemakalah: Rp 350.000,-</li>
+<li>Peserta Umum: Rp 150.000,-</li>
+<li>Mahasiswa FT UNMA: Rp 100.000,-</li>
+</ul>
+<strong>Transfer Biaya ke:</strong>
+<br>Bank BJB
+<br>No. Rekening: 0061996737101
+<br>a.n. Fakultas Teknik UNMA
                         </div>
                         
                         <hr class="my-4">
@@ -65,7 +74,7 @@
                                 <?= form_open_multipart('user/payment/do_upload/' . $payment->payment_id); ?>
                                     <div class="mb-3">
                                         <label for="bukti_bayar" class="form-label">Pilih file (JPG, PNG, PDF, maks 2MB)</label>
-                                        <input class="form-control" type="file" name="bukti_bayar" id="bukti_bayar" required>
+                                        <input class="form-control" type="file" name="bukti_bayar" id="bukti_bayar" required accept="image/*">
                                     </div>
                                     <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane me-1"></i> Kirim Bukti Bayar</button>
                                     <a href="<?= site_url('user/dashboard'); ?>" class="btn btn-secondary">Kembali ke Dasbor</a>
@@ -86,7 +95,7 @@
     </div>
 
     <footer class="bg-light text-center p-3 mt-5 border-top">
-        <p class="mb-0">Copyright &copy; Panitia Konferensi <?= date('Y'); ?></p>
+        <p class="mb-0">Copyright &copy; <?=$_ENV['SITE_NAME']?> <?= date('Y'); ?></p>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

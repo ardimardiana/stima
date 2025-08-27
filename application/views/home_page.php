@@ -10,10 +10,62 @@
         </div>
     <?php endif; ?>
     
+        <?php if (!empty($banners)): ?>
+            <div id="eventCarousel" class="carousel slide shadow-sm rounded mb-4" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    <?php foreach($banners as $index => $banner): ?>
+                    <button type="button" data-bs-target="#eventCarousel" data-bs-slide-to="<?= $index; ?>" class="<?= $index == 0 ? 'active' : ''; ?>"></button>
+                    <?php endforeach; ?>
+                </div>
+                <div class="carousel-inner rounded">
+                    <?php foreach($banners as $index => $banner): ?>
+                    <div class="carousel-item <?= $index == 0 ? 'active' : ''; ?>">
+                        <img src="<?= base_url($banner->image_path); ?>" class="d-block w-100" alt="Banner Event">
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#eventCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span><span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#eventCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span><span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        <?php endif; ?>
+    
         <header class="hero-section text-center">
             <h1><?= htmlspecialchars($event->nama_event, ENT_QUOTES, 'UTF-8'); ?></h1>
             <p class="lead"><?= htmlspecialchars($event->tagline, ENT_QUOTES, 'UTF-8'); ?></p>
+            
+        <div id="countdown-container" class="mt-4">
+        <h5 class="mb-3">Acara akan dimulai dalam:</h5>
+        <div id="countdown-timer" class="d-flex justify-content-center gap-3 fs-2">
+            <div>
+                <span id="days" class="countdown-number">0</span>
+                <div class="countdown-label">Hari</div>
+            </div>
+            <div>:</div>
+            <div>
+                <span id="hours" class="countdown-number">0</span>
+                <div class="countdown-label">Jam</div>
+            </div>
+            <div>:</div>
+            <div>
+                <span id="minutes" class="countdown-number">0</span>
+                <div class="countdown-label">Menit</div>
+            </div>
+            <div>:</div>
+            <div>
+                <span id="seconds" class="countdown-number">0</span>
+                <div class="countdown-label">Detik</div>
+            </div>
+        </div>
+        <div id="countdown-finished" class="alert alert-success mt-4 d-none">
+            <h4>Acara Telah Dimulai!</h4>
+        </div>
         </header>
+        
+        
 
         <div class="row">
             <main class="col-lg-8">

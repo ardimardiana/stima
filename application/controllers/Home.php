@@ -73,7 +73,9 @@ class Home extends CI_Controller {
         $data['event'] = $event_data;
         $data['announcements'] = $this->Announcement_model->get_by_event($event_data->event_id);
         $data['archived_events'] = $this->Event_model->get_archived_events();
-        
+        $this->load->model('Banner_model');
+        $data['banners'] = $this->Banner_model->get_by_event($event_data->event_id);
+    
         // Kirim flag untuk menandakan apakah event ini aktif atau tidak
         $data['is_active_event'] = ($event_data->status == 'aktif');
         $data['title'] = 'Selamat Datang';

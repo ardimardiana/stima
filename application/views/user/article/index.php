@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $title; ?> - CMS</title>
+    <title><?= $title; ?> - <?=$_ENV['SITE_NAME']?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <style>
@@ -37,6 +37,7 @@
             $step1_class = ($status != 'belum_submit') ? 'completed' : '';
             $step2_class = ($status == 'in_review' || $status == 'revision' || $status == 'revision_submitted' || $status == 'rejected' || $status == 'final_submitted') ? 'completed' : '';
             $step3_class = ($status == 'accepted' ) ? 'completed' : '';
+            $is_submission_open = (date('Y-m-d H:i:s') <= $event->tgl_batas_submit . ' 23:59:59');
         ?>
 
         <div class="stepper-wrapper">
@@ -156,7 +157,7 @@
                          <?php elseif($status == 'revision'): ?>
                              <div class="alert alert-warning mb-0"><h5 class="alert-heading">Dibutuhkan Revisi</h5><p class="mb-2 small">Reviewer telah memberikan masukan. Silakan unggah naskah revisi Anda.</p>
                                  <?= form_open_multipart('user/article/submit_revision/' . $registration_id . '/' . $paper->paper_id); ?>
-                                     <div class="mb-2"><input type="file" name="file_revision" class="form-control" required accept=".pdf,.doc,.docx"></div>
+                                     <div class="mb-2"><input type="file" name="file_revision" class="form-control" required accept=".docx"></div>
                                      <button type="submit" class="btn btn-warning w-100"><i class="fas fa-upload me-2"></i>Kirim Revisi</button>
                                  <?= form_close(); ?>
                              </div>
@@ -164,8 +165,8 @@
                              <div class="alert alert-success mb-0"><h5 class="alert-heading">Artikel Diterima!</h5><p class="mb-2 small">Selamat! Silakan unggah naskah final dan slide presentasi.</p>
                                  <a href="<?= site_url('user/article/generate_loa/' . $registration_id . '/' . $paper->paper_id); ?>" class="btn btn-outline-success" target="_blank"><i class="fas fa-download me-2"></i>Unduh Letter of Acceptance (LoA)</a>
                                  <?= form_open_multipart('user/article/submit_final/' . $registration_id . '/' . $paper->paper_id); ?>
-                                     <div class="mb-2"><label class="form-label small">Naskah Final</label><input type="file" name="file_path_final" class="form-control form-control-sm" required></div>
-                                     <div class="mb-2"><label class="form-label small">Slide Presentasi</label><input type="file" name="slide_path" class="form-control form-control-sm" required></div>
+                                     <div class="mb-2"><label class="form-label small">Naskah Final</label><input type="file" name="file_path_final" class="form-control form-control-sm" accept=".docx" required></div>
+                                     <div class="mb-2"><label class="form-label small">Slide Presentasi</label><input type="file" name="slide_path" class="form-control form-control-sm" accept=".pptx" required></div>
                                      <button type="submit" class="btn btn-success w-100"><i class="fas fa-flag-checkered me-2"></i>Kirim Final</button>
                                  <?= form_close(); ?>
                              </div>

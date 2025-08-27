@@ -2,7 +2,7 @@
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">
                         <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">Copyright &copy; STIMA 2025</div>
+                            <div class="text-muted">Copyright &copy; <?=$_ENV['SITE_NAME']?> 2025</div>
                         </div>
                     </div>
                 </footer>

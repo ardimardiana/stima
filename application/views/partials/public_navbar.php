@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm">
   <div class="container">
-    <a class="navbar-brand" href="<?= site_url(); ?>"><strong><?= htmlspecialchars($event->tahun, ENT_QUOTES, 'UTF-8'); ?></strong> CMS</a>
+    <a class="navbar-brand" href="<?= site_url(); ?>"><strong><?= htmlspecialchars($event->tahun, ENT_QUOTES, 'UTF-8'); ?></strong> <?=$_ENV['SITE_NAME']?></a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>

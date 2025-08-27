@@ -8,8 +8,19 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <style>
         body { background-color: #f4f6f9; }
-        .hero-section { background-color: #343a40; color: white; padding: 4rem 2rem; margin-bottom: 2rem; border-radius: 0.5rem; }
+        .hero-section { background-color: #0d6efd; color: white; padding: 4rem 2rem; margin-bottom: 2rem; border-radius: 0.5rem; }
         .card-header-custom { background-color: #0d6efd; color: white; }
+        .countdown-number {
+            font-weight: 700;
+            background-color: rgba(255,255,255,0.1);
+            padding: 10px 15px;
+            border-radius: 5px;
+        }
+        .countdown-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>

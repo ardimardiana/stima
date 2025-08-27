@@ -6,19 +6,53 @@ class Dashboard extends User_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('User_model'); // Load model baru kita
+        $this->load->model('Event_model');
     }
 
     public function index() {
         $user_id = $this->session->userdata('user_id');
-
+        $active_event = $this->Event_model->get_active_event(); // Asumsi fungsi ini ada
+    
+        if (!$active_event) { /* ... handle jika tidak ada event ... */ }
+    
         $data['title'] = 'Dashboard Peserta';
         $data['nama_user'] = $this->session->userdata('nama');
-
-        // Ambil data dari model
-        $data['active_events'] = $this->User_model->get_active_events_with_user_status($user_id);
+        $data['active_event'] = $active_event;
+    
+        // Ambil data pendaftaran untuk setiap peran secara terpisah
+        $data['registration_peserta'] = $this->User_model->get_user_registration_by_role($user_id, $active_event->event_id, 'peserta');
+        $data['registration_presenter'] = $this->User_model->get_user_registration_by_role($user_id, $active_event->event_id, 'presenter');
+        
+        // Ambil data paper (jika ada) untuk logika konfirmasi kehadiran
+        if($data['registration_presenter']){
+            $this->load->model('Article_model');
+            $data['paper_presenter'] = $this->Article_model->get_paper_by_registration($data['registration_presenter']->registration_id);
+        } else {
+            $data['paper_presenter'] = null;
+        }
+        
         $data['history_events'] = $this->User_model->get_user_event_history($user_id);
-
+    
         $this->load->view('user/dashboard/index', $data);
+    }
+    
+    // Tambahkan fungsi baru untuk konfirmasi kehadiran
+    public function confirm_attendance() {
+        $registration_id = $this->input->post('registration_id');
+        $kehadiran = $this->input->post('kehadiran');
+        
+        // Keamanan: Pastikan registrasi ini milik user yang login
+        $user_id = $this->session->userdata('user_id');
+        if (!$this->User_model->is_registration_owner($registration_id, $user_id)) {
+            show_404(); return;
+        }
+        
+        // Update status konfirmasi
+        $this->db->where('registration_id', $registration_id);
+        $this->db->update('tbl_event_registrations', ['status_kehadiran' => $kehadiran]);
+        
+        $this->session->set_flashdata('success', 'Terima kasih telah memberikan konfirmasi kehadiran.');
+        redirect('user/dashboard');
     }
 
     public function register_for_event() {

@@ -15,7 +15,7 @@
     
     <li class="nav-item">
         <a class="nav-link <?= ($this->uri->segment(2) == 'reports') ? 'active' : '' ?>" 
-           href="<?= site_url('admin/reports/participants/' . $event->event_id) ?>">
+           href="<?= site_url('admin/reports/index/' . $event->event_id) ?>">
            <i class="fas fa-users me-1"></i> Daftar Peserta
         </a>
     </li>
@@ -48,6 +48,12 @@
         <a class="nav-link <?= ($this->uri->segment(2) == 'schedule') ? 'active' : '' ?>" 
            href="<?= site_url('admin/schedule/index/' . $event->event_id) ?>">
            <i class="fas fa-calendar-alt me-1"></i> Manajemen Jadwal
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link <?= ($this->uri->segment(2) == 'banners') ? 'active' : '' ?>" 
+           href="<?= site_url('admin/banners/index/' . $event->event_id) ?>">
+           <i class="fas fa-images me-1"></i> Manajemen Banner
         </a>
     </li>
     <li class="nav-item">

@@ -70,6 +70,10 @@
                 <h5 class="mb-3">Pengaturan Letter of Acceptance (LoA)</h5>
                 <div class="mb-3">
                     <label for="header_loa" class="form-label">Header / Kop Surat LoA (Gambar)</label>
+                    <?php 
+                    if($event->header_loa_path)
+                        echo '<img src="'.$event->header_loa_path.'">';
+                    ?>
                     <input type="file" name="header_loa" class="form-control">
                     <small class="text-muted">Kosongkan jika tidak ingin mengubah header yang sudah ada.</small>
                 </div>

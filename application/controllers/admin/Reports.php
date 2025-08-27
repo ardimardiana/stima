@@ -69,7 +69,7 @@ class Reports extends Admin_Controller {
     }
 
     // Menampilkan halaman laporan daftar peserta
-    public function participants($event_id) {
+    public function index($event_id) {
         $data['title'] = 'Laporan Daftar Peserta';
         $data['event'] = $this->Event_model->get_event_by_id($event_id);
         $data['participants'] = $this->Participant_model->get_all_participants_for_report($event_id);

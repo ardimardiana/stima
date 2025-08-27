@@ -31,7 +31,7 @@
                     <tbody>
                         <?php foreach($events as $event): ?>
                         <tr>
-                            <td><?= htmlspecialchars($event->nama_event, ENT_QUOTES, 'UTF-8'); ?></td>
+                            <td><a href="<?= site_url('admin/event_manager/index/' . $event->event_id) ?>" class="btn btn-sm btn-primary" title="Kelola Event"><?= htmlspecialchars($event->nama_event, ENT_QUOTES, 'UTF-8'); ?></a></td>
                             <td><?= $event->tahun; ?></td>
                             <td>
                                 <?php if($event->status == 'aktif'): ?>
@@ -44,7 +44,6 @@
                             </td>
                             <td>/<?= $event->slug_url; ?></td>
                             <td>
-                                <a href="<?= site_url('admin/checkin/index/' . $event->event_id) ?>" class="btn btn-sm btn-success" title="Check-in Peserta"><i class="fas fa-qrcode"></i> Check-in</a>
                                 <a href="<?= site_url('admin/event_manager/index/' . $event->event_id) ?>" class="btn btn-sm btn-primary" title="Kelola Event"><i class="fas fa-cog"></i> Kelola</a>
                                 
                                 <a href="<?= site_url('admin/events/edit/' . $event->event_id) ?>" class="btn btn-sm btn-warning" title="Edit"><i class="fas fa-edit"></i></a>

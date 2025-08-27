@@ -22,4 +22,16 @@ class Dashboard extends Admin_Controller {
         $this->load->view('admin/dashboard/index', $data); // Konten dashboard
         $this->load->view('admin/_partials/_footer');
     }
+    
+    function atur($arah)
+    {
+        $this->load->model('Event_model');
+        $event = $this->Event_model->get_active_event();
+        if (!$event) {
+            // Jika tidak ada event aktif, mungkin tampilkan halaman "coming soon" atau arahkan ke event terakhir
+            echo "Saat ini tidak ada event yang sedang aktif.";
+            return;
+        }
+        redirect(site_url('admin/'.$arah.'/index/'.$event->event_id));
+    }
 }

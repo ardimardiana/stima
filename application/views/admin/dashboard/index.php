@@ -37,7 +37,7 @@
                     </div>
                 </div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white stretched-link" href="#">Lihat Detail</a>
+                    <a class="small text-white stretched-link" href="<?= site_url('admin/events'); ?>">Lihat Detail</a>
                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                 </div>
             </div>
@@ -56,7 +56,7 @@
                     </div>
                 </div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white stretched-link" href="#">Lihat Detail</a>
+                    <a class="small text-white stretched-link" href="<?= site_url('admin/dashboard/atur/reports'); ?>">Lihat Detail</a>
                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                 </div>
             </div>
@@ -75,7 +75,7 @@
                     </div>
                 </div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white stretched-link" href="#">Lihat Detail</a>
+                    <a class="small text-white stretched-link" href="<?= site_url('admin/dashboard/atur/articles'); ?>">Lihat Detail</a>
                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                 </div>
             </div>

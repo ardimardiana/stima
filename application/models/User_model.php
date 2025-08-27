@@ -1,6 +1,21 @@
 <?php
 class User_model extends CI_Model {
     
+    // Ganti fungsi lama get_active_events_... dengan fungsi yang lebih spesifik ini
+    public function get_user_registration_by_role($user_id, $event_id, $role) {
+        $this->db->where('user_id', $user_id);
+        $this->db->where('event_id', $event_id);
+        $this->db->where('peran_event', $role);
+        $registration = $this->db->get('tbl_event_registrations')->row();
+    
+        // Jika ada, langsung ambil data pembayarannya juga
+        if ($registration) {
+            $registration->payment = $this->db->get_where('tbl_payments', ['registration_id' => $registration->registration_id])->row();
+        }
+        
+        return $registration;
+    }
+    
     /**
      * Memverifikasi apakah sebuah registration_id dimiliki oleh user_id tertentu.
      * Ini adalah kunci untuk mencegah akses ilegal ke data orang lain.

@@ -99,7 +99,7 @@ class Article extends User_Controller {
         // Cek apakah file slide diisi di form
         if (!empty($_FILES['slide_path']['name'])) {
             $config_slide['upload_path']   = './uploads/slides/';
-            $config_slide['allowed_types'] = 'pptx|ppt|pdf';
+            $config_slide['allowed_types'] = 'pptx|ppt';
             $config_slide['max_size']      = 10240; // 10MB
             $config_slide['encrypt_name']  = TRUE;
             
@@ -194,6 +194,9 @@ class Article extends User_Controller {
         $registration_data = $this->db->get_where('tbl_event_registrations', ['registration_id' => $registration_id])->row();
         $this->load->model('Topic_model');
         $data['topics'] = $this->Topic_model->get_by_event($registration_data->event_id);
+        $this->load->model('Event_model');
+        $data['event'] = $this->Event_model->get_event_by_id($registration_data->event_id);
+    
         
         $data['reviews'] = [];
         $data['authors'] = [];
@@ -235,6 +238,16 @@ class Article extends User_Controller {
         $user_id = $this->session->userdata('user_id');
         if (!$this->User_model->is_registration_owner($registration_id, $user_id)) {
             show_404();
+            return;
+        }
+        
+        $registration_data = $this->db->get_where('tbl_event_registrations', ['registration_id' => $registration_id])->row();
+        $this->load->model('Event_model');
+        $event = $this->Event_model->get_event_by_id($registration_data->event_id);
+    
+        if (date('Y-m-d H:i:s') > $event->tgl_batas_submit . ' 23:59:59') {
+            $this->session->set_flashdata('error', 'Batas waktu untuk submit artikel telah berakhir.');
+            redirect('user/article/index/' . $registration_id);
             return;
         }
     
