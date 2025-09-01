@@ -148,7 +148,7 @@ class Article extends User_Controller {
         $paper = $this->Article_model->get_paper_by_registration($registration_id);
     
         // Keamanan 2: Pastikan paper ada dan statusnya 'submitted'
-        if ($paper && $paper->paper_id == $paper_id && $paper->status_artikel == 'submitted') {
+        if ($paper && $paper->paper_id == $paper_id && ($paper->status_artikel == 'submitted' || $paper->status_artikel == 'rejected')) {
             
             // 1. Simpan path file sebelum record dihapus dari database
             $file_path_to_delete = $paper->file_path_initial;

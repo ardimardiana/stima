@@ -176,6 +176,12 @@
                              </div>
                          <?php elseif($status == 'rejected'): ?>
                              <div class="alert alert-danger mb-0"><h5 class="alert-heading">Ditolak</h5><p class="mb-0 small">Artikel Anda belum dapat diterima pada kesempatan ini.</p></div>
+                              <p class="small text-muted">Merasa ada kesalahan pada judul, file, atau data penulis? Anda dapat menghapus submisi dan mengunggah ulang.</p>
+                             <a href="<?= site_url('user/article/delete_submission/' . $registration_id . '/' . $paper->paper_id) ?>" 
+                                class="btn btn-sm btn-outline-danger w-100" 
+                                onclick="return confirm('Anda yakin ingin menghapus submisi ini? Anda harus mengulangi proses dari awal.')">
+                                <i class="fas fa-trash me-1"></i> Hapus dan Ulangi Submisi
+                             </a>
                          <?php else: // (status 'belum_submit') ?>
                              <div class="alert alert-secondary mb-0"><p class="mb-0 small">Status akan muncul di sini setelah Anda submit artikel.</p></div>
                          <?php endif; ?>

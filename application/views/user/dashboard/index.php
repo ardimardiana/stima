@@ -57,6 +57,7 @@
                 <!-- ## Bagian Pendaftaran sebagai Presenter ## -->
                 <div class="p-3 border rounded">
                     <h5><i class="fas fa-file-powerpoint me-2"></i>Partisipasi sebagai Presenter</h5>
+                    <p class="text-center"><a href="<?=$_ENV['grup_wa']?>"><img style="max-width:200px" src="https://assets.kompasiana.com/items/album/2020/12/28/wa-grouo3-5fe9c2fad541df11077fce52.png"></a></p>
                     <?php if (!$registration_presenter): // JIKA BELUM TERDAFTAR SEBAGAI PRESENTER ?>
                         <p class="text-muted">Daftarkan diri Anda untuk mempresentasikan naskah ilmiah.</p>
                         <?= form_open('user/dashboard/register_for_event'); ?>
@@ -66,6 +67,7 @@
                     <?php else: // JIKA SUDAH TERDAFTAR SEBAGAI PRESENTER, TAMPILKAN STATUSNYA ?>
                         <?php $this->load->view('partials/payment_status_card', ['registration' => $registration_presenter, 'paper' => $paper_presenter]); ?>
                     <?php endif; ?>
+                
                 </div>
             </div>
         </div>

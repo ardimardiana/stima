@@ -9,7 +9,9 @@
         <li class="nav-item">
           <a class="nav-link <?= ($this->uri->segment(2) == '' || $this->uri->segment(2) == 'view_event') ? 'active' : '' ?>" href="<?= site_url($event->slug_url); ?>">Home</a>
         </li>
-        
+        <li class="nav-item">
+          <a class="nav-link" href="<?=$_ENV['template']?>" target="_blank">Template Artikel</a>
+        </li>
         <?php if (!empty($archived_events)): ?>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">Riwayat Event</a>
@@ -20,7 +22,6 @@
           </ul>
         </li>
         <?php endif; ?>
-    
         <li class="nav-item">
           <a class="nav-link <?= ($this->uri->segment(2) == 'speakers') ? 'active' : '' ?>" href="<?= site_url('home/speakers'); ?>">Speakers</a>
         </li>

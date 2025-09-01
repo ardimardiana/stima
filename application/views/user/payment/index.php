@@ -73,7 +73,7 @@
                                 
                                 <?= form_open_multipart('user/payment/do_upload/' . $payment->payment_id); ?>
                                     <div class="mb-3">
-                                        <label for="bukti_bayar" class="form-label">Pilih file (JPG, PNG, PDF, maks 2MB)</label>
+                                        <label for="bukti_bayar" class="form-label">Pilih file <strong>GAMBAR</strong>(JPG, PNG, PDF, maks 2MB)</label>
                                         <input class="form-control" type="file" name="bukti_bayar" id="bukti_bayar" required accept="image/*">
                                     </div>
                                     <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane me-1"></i> Kirim Bukti Bayar</button>

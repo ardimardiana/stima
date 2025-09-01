@@ -65,7 +65,7 @@
                     <h6>Penulis</h6>
                     <ul class="list-group list-group-flush">
                         <?php foreach($authors as $author): ?>
-                        <li class="list-group-item"><?= htmlspecialchars($author->nama_depan . ' ' . $author->nama_belakang); ?> (<?= htmlspecialchars($author->afiliasi); ?>)</li>
+                        <li class="list-group-item"><?= htmlspecialchars($author->nama_depan . ' ' . $author->nama_belakang); ?> (<?= htmlspecialchars($author->afiliasi); ?>) <?=$author->email?></li>
                         <?php endforeach; ?>
                     </ul>
                     <hr>

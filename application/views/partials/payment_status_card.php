@@ -31,6 +31,36 @@
                 <?php if($registration->peran_event == 'presenter'): ?>
                     <a href="<?= site_url('user/article/index/' . $registration->registration_id); ?>" class="btn btn-sm btn-info">Lanjutkan ke Manajemen Artikel</a>
                 <?php endif; ?>
+                
+                <?php if($registration->peran_event == 'peserta'): ?>
+                    <?php if ($registration->status_kehadiran == 1): ?>
+                        <hr>
+                        <h5>Sertifikat Anda</h5>
+                        <?php if ($active_event->sertifikat_aktif == 1): ?>
+                            <p>Silakan unduh sertifikat Anda di bawah ini:</p>
+                            <a href="<?= base_url($registration->sertifikat_path) ?>" class="btn btn-sm btn-info"><i class="fas fa-download me-1"></i> Unduh Sertifikat Peserta</a>
+                        <?php else: ?>
+                            <p class="text-muted">Sertifikat akan tersedia untuk diunduh setelah panitia mengaktifkan akses.</p>
+                        <?php endif; ?>
+                    <?php else: ?>
+                        <p class="text-muted mt-3">Sertifikat akan dapat diakses setelah Anda melakukan check-in kehadiran pada saat acara.</p>
+                    <?php endif; ?>
+                <?php endif; ?>
+                
+                <?php if($registration->peran_event == 'presenter'): ?>
+                    <?php if ($registration->status_kehadiran == 1): ?>
+                        <hr>
+                        <h5>Sertifikat Anda</h5>
+                        <?php if ($active_event->sertifikat_aktif == 1): ?>
+                            <p>Silakan unduh sertifikat Anda di bawah ini:</p>
+                            <a href="<?= base_url($registration->sertifikat_presenter_path) ?>" class="btn btn-sm btn-info"><i class="fas fa-download me-1"></i> Unduh Sertifikat Peserta</a>
+                        <?php else: ?>
+                            <p class="text-muted">Sertifikat akan tersedia untuk diunduh setelah panitia mengaktifkan akses.</p>
+                        <?php endif; ?>
+                    <?php else: ?>
+                        <p class="text-muted mt-3">Sertifikat akan dapat diakses setelah Anda melakukan check-in kehadiran pada saat acara.</p>
+                    <?php endif; ?>
+                <?php endif; ?>
 
                 <!-- Tampilkan status sertifikat -->
             </div>
