@@ -19,7 +19,7 @@
                     <a href="<?= base_url($review->file_for_reviewer_path); ?>" class="btn btn-primary" target="_blank"><i class="fas fa-download me-2"></i> Unduh Naskah Lengkap untuk Direview</a>
                 </div>
 
-                <?= form_open('review/submit/' . $review->reviewer_token); ?>
+                <?= form_open_multipart('review/submit/' . $review->reviewer_token); ?>
                     <div class="mb-4"><label class="form-label fw-bold">1. Relevansi</label>
                         <div class="form-check"><input type="radio" name="relevansi" value="1" class="form-check-input" required> <label class="form-check-label">Tidak Relevan</label></div>
                         <div class="form-check"><input type="radio" name="relevansi" value="2" class="form-check-input"> <label class="form-check-label">Kurang Relevan</label></div>
@@ -64,7 +64,10 @@
                         <div class="form-check"><input type="radio" name="rekomendasi_best_paper" value="1" class="form-check-input"> <label class="form-check-label">Ya</label></div>
                     </div>
                     <div class="mb-4"><label for="catatan_untuk_panitia" class="form-label fw-bold">8. Catatan untuk Panitia (Tidak akan terlihat oleh penulis)</label><textarea name="catatan_untuk_panitia" class="form-control" rows="3"></textarea></div>
-                    
+                    <div class="mb-4">
+                            <label class="form-label">Unggah File (.docx/.pdf)</label>
+                            <input type="file" name="anonymized_file" class="form-control" required>
+                    </div>
                     <hr>
                     <div class="form-check mb-3">
                         <input class="form-check-input" type="checkbox" name="send_copy_to_self" value="1" id="send_copy_to_self">

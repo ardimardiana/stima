@@ -228,8 +228,13 @@
                     <ul class="list-group list-group-flush">
                         <?php foreach($reviews as $review): ?>
                             <li class="list-group-item">
-                                <p class="small text-muted mb-0 fst-italic">"<?= nl2br(htmlspecialchars($review->saran_perbaikan, ENT_QUOTES, 'UTF-8')); ?>"</p>
+                                <p class="">"<?= nl2br(htmlspecialchars($review->saran_perbaikan, ENT_QUOTES, 'UTF-8')); ?>"</p>
                             </li>
+                            <?php  if($review->reviewed_file_path) { ?>
+                            <li class="list-group-item">
+                                <p class=""><a href="<?=site_url($review->reviewed_file_path)?>" target="_blank">Dokumen Revisi</a></p>
+                            </li>
+                            <?php } ?>
                         <?php endforeach; ?>
                     </ul>
                 </div>

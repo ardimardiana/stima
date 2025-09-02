@@ -52,6 +52,21 @@ class Review extends CI_Controller {
             return;
         }
         
+        // Konfigurasi Upload File Anonim
+        $config['upload_path']   = './uploads/review_files/';
+        $config['allowed_types'] = 'docx|pdf';
+        $config['max_size']      = 5120; // 5MB
+        $config['encrypt_name']  = TRUE;
+    
+        if (!is_dir($config['upload_path'])) { mkdir($config['upload_path'], 0777, TRUE); }
+        $this->load->library('upload', $config);
+        
+        $file_path = null;
+        if($this->upload->do_upload('anonymized_file')){
+            $upload_data = $this->upload->data();
+            $file_path = 'uploads/review_files/' . $upload_data['file_name'];
+        }
+        
         $data_to_update = [
             'relevansi' => $this->input->post('relevansi'),
             'kualitas_konten' => $this->input->post('kualitas_konten'),
@@ -61,6 +76,7 @@ class Review extends CI_Controller {
             'saran_perbaikan' => $this->input->post('saran_perbaikan'),
             'rekomendasi_best_paper' => $this->input->post('rekomendasi_best_paper'),
             'catatan_untuk_panitia' => $this->input->post('catatan_untuk_panitia'),
+            'reviewed_file_path' => $file_path,
             'status_review' => 'submitted',
             'tgl_submit_review' => date('Y-m-d H:i:s')
         ];

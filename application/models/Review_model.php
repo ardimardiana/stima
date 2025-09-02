@@ -14,6 +14,7 @@ class Review_model extends CI_Model {
     public function record_first_access($token) {
         $data = [
             'token_first_accessed_at' => date('Y-m-d H:i:s'),
+            'token_expires_at' => date('Y-m-d H:i:s', strtotime('+7 days')),
             'status_review' => 'opened' // Ubah status menjadi 'dibuka'
         ];
         $this->db->where('reviewer_token', $token);

@@ -72,7 +72,7 @@
                     <label for="header_loa" class="form-label">Header / Kop Surat LoA (Gambar)</label>
                     <?php 
                     if($event->header_loa_path)
-                        echo '<img src="'.$event->header_loa_path.'">';
+                        echo '<p><img src="'.site_url($event->header_loa_path).'" width="100%"></p>';
                     ?>
                     <input type="file" name="header_loa" class="form-control">
                     <small class="text-muted">Kosongkan jika tidak ingin mengubah header yang sudah ada.</small>
