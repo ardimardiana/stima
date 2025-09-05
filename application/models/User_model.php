@@ -1,6 +1,15 @@
 <?php
 class User_model extends CI_Model {
     
+    public function get_user_details($user_id) {
+        return $this->db->get_where('tbl_users', ['user_id' => $user_id])->row();
+    }
+    
+    public function update_profile($user_id, $data) {
+        $this->db->where('user_id', $user_id);
+        return $this->db->update('tbl_users', $data);
+    }
+    
     // Ganti fungsi lama get_active_events_... dengan fungsi yang lebih spesifik ini
     public function get_user_registration_by_role($user_id, $event_id, $role) {
         $this->db->where('user_id', $user_id);

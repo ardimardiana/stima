@@ -24,6 +24,7 @@
                             <th>No</th>
                             <th>Nama Lengkap</th>
                             <th>Email</th>
+                            <th>Afiliasi</th>
                             <th>Peran</th>
                             <th>Status Pembayaran</th>
                             <th>Status Kehadiran</th>
@@ -35,6 +36,7 @@
                             <td><?= $no++; ?></td>
                             <td><?= htmlspecialchars($p->nama_depan . ' ' . $p->nama_belakang, ENT_QUOTES, 'UTF-8'); ?></td>
                             <td><?= htmlspecialchars($p->email, ENT_QUOTES, 'UTF-8'); ?></td>
+                            <td><?= ucfirst($p->afiliasi); ?></td>
                             <td><?= ucfirst($p->peran_event); ?></td>
                             <td>
                                 <?php 

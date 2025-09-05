@@ -10,13 +10,17 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="#">Dasbor Peserta</a>
+            <a class="navbar-brand" href="<?= site_url('user/dashboard'); ?>">Dasbor Peserta</a>
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><?= $nama_user; ?></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="<?= site_url('auth/logout'); ?>">Logout</a>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarUserDropdown" role="button" data-bs-toggle="dropdown">
+                    <i class="fas fa-user me-1"></i> <?= $nama_user; ?>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarUserDropdown">
+                    <li><a class="dropdown-item" href="<?= site_url('user/profile'); ?>">Edit Profil</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="<?= site_url('auth/logout'); ?>">Logout</a></li>
+                  </ul>
                 </li>
             </ul>
         </div>

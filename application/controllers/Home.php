@@ -44,6 +44,7 @@ class Home extends CI_Controller {
         }
     
         $this->load->model('Schedule_model');
+        $this->load->model('Event_model');
         $this->load->model('Room_model');
     
         $data['title'] = 'Jadwal Acara';
@@ -52,8 +53,8 @@ class Home extends CI_Controller {
         // Ambil daftar ruangan untuk header tabel
         $data['rooms'] = $this->Room_model->get_by_event($active_event->event_id);
         // Ambil data jadwal yang sudah terstruktur
-        $data['schedule_data'] = $this->Schedule_model->get_public_schedule($active_event->event_id);
-        // Ambil riwayat event untuk navbar
+        $data['schedule_data'] = $this->Schedule_model->get_public_schedule_by_room($active_event->event_id);
+    
         $data['archived_events'] = $this->Event_model->get_archived_events();
     
         $this->load->view('schedule', $data);

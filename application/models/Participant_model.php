@@ -16,7 +16,7 @@ class Participant_model extends CI_Model {
     
     public function get_all_participants_for_report($event_id) {
     $this->db->select(
-            'u.nama_depan, u.nama_belakang, u.email, ' .
+            'u.nama_depan, u.nama_belakang, u.email, u.afiliasi,' .
             'er.peran_event, er.status_kehadiran, ' .
             'p.status_pembayaran'
         );

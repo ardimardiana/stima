@@ -39,12 +39,23 @@
                     <?php foreach($rooms as $room): ?>
                         <h6 class="mt-3">Ruangan: <?= $room->nama_ruang; ?></h6>
                         <?php if(isset($schedules[$room->room_id])): ?>
-                            <?php foreach($schedules[$room->room_id] as $schedule): ?>
+                            <?php foreach($schedules[$room->room_id] as $session): ?>
                                 <div class="session-box mb-2">
-                                    <strong><?= date('H:i', strtotime($schedule->waktu_mulai)); ?> - <?= date('H:i', strtotime($schedule->waktu_selesai)); ?>: <?= $schedule->nama_sesi; ?></strong>
-                                    <div id="schedule-<?= $schedule->schedule_id; ?>" class="session-papers mt-2" data-schedule-id="<?= $schedule->schedule_id; ?>">
-                                        <?php if($schedule->paper_id): ?>
-                                            <div class="list-group-item paper-item" data-paper-id="<?= $schedule->paper_id; ?>"><?= $schedule->paper_title; ?></div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <strong><?= date('H:i', strtotime($session->waktu_mulai)); ?> - <?= date('H:i', strtotime($session->waktu_selesai)); ?>: <?= $session->nama_sesi; ?></strong>
+                                        <a href="<?= site_url('admin/schedule/delete_session/'. $session->session_id); ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Anda yakin ingin menghapus sesi ini? Semua paper di dalamnya akan kembali ke daftar \'Belum Dijadwalkan\'.');"
+                                           title="Hapus Sesi">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                    <div id="session-<?= $session->session_id; ?>" class="session-papers list-group mt-2" data-session-id="<?= $session->session_id; ?>">
+                                        <?php if(!empty($session->papers)): ?>
+                                            <?php foreach($session->papers as $paper): ?>
+                                                <div class="list-group-item paper-item d-flex justify-content-between align-items-center" data-paper-id="<?= $paper->paper_id; ?>">
+                                                    <span><?= $paper->judul; ?></span>
+                                                    <button type="button" class="btn-close remove-paper-btn" aria-label="Close"></button>
+                                                </div>
+                                            <?php endforeach; ?>
                                         <?php endif; ?>
                                     </div>
                                 </div>
@@ -87,30 +98,54 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Inisialisasi list paper yang belum dijadwalkan
     var unscheduledList = document.getElementById('unscheduled-papers');
+    var unscheduledListEl = document.getElementById('unscheduled-papers');
     new Sortable(unscheduledList, {
         group: 'shared-papers', // Grup yang sama agar bisa dipindah
         animation: 150
     });
 
-    // Inisialisasi setiap kotak sesi di grid jadwal
     document.querySelectorAll('.session-papers').forEach(function(sessionEl) {
         new Sortable(sessionEl, {
             group: 'shared-papers',
             animation: 150,
             onAdd: function (evt) {
-                // Event ini dijalankan saat paper di-drop ke kotak sesi
                 var paperId = evt.item.getAttribute('data-paper-id');
-                var scheduleId = evt.to.getAttribute('data-schedule-id');
+                var sessionId = evt.to.getAttribute('data-session-id'); // Ganti ke session-id
                 
                 // Kirim data ke server via AJAX
                 fetch("<?= site_url('admin/schedule/assign_paper'); ?>", {
                     method: 'POST',
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                    body: `paper_id=${paperId}&schedule_id=${scheduleId}`
+                    body: `paper_id=${paperId}&session_id=${sessionId}` // Ganti ke session_id
+                })
+                .then(response => response.json())
+                .then(data => { console.log(data.message); });
+            }
+        });
+    });
+    
+    document.querySelectorAll('.session-papers').forEach(function(sessionEl) {
+        sessionEl.addEventListener('click', function(evt) {
+            // Cek apakah yang diklik adalah tombol hapus
+            if (evt.target.classList.contains('remove-paper-btn')) {
+                const paperItem = evt.target.closest('.paper-item');
+                const paperId = paperItem.getAttribute('data-paper-id');
+
+                // Kirim permintaan hapus ke server via AJAX
+                fetch("<?= site_url('admin/schedule/remove_paper'); ?>", {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                    body: `paper_id=${paperId}`
                 })
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data.message); // Tampilkan notifikasi jika perlu
+                    if (data.status === 'success') {
+                        // Jika berhasil, pindahkan elemen paper secara visual
+                        // dari kotak sesi ke daftar "Belum Dijadwalkan"
+                        unscheduledListEl.appendChild(paperItem);
+                    } else {
+                        alert('Gagal menghapus: ' + data.message);
+                    }
                 });
             }
         });

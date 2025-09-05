@@ -5,7 +5,7 @@
     
     <?php $this->load->view('admin/event_manager/_nav'); ?>
     
-    <ul class="nav nav-tabs">
+    <ul class="nav nav-tabs mb-4">
         <li class="nav-item">
             <a class="nav-link <?= empty($status_filter) ? 'active' : '' ?>" href="<?= site_url('admin/articles/index/'.$event->event_id) ?>">Semua</a>
         </li>

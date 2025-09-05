@@ -250,6 +250,8 @@ class Article extends User_Controller {
             redirect('user/article/index/' . $registration_id);
             return;
         }
+        
+        //var_dump($_FILES); exit;
     
         // Validasi Form
         $this->form_validation->set_rules('judul', 'Judul Makalah', 'required|trim');
@@ -268,6 +270,7 @@ class Article extends User_Controller {
             // Jika validasi atau upload gagal
             $errors = validation_errors() . ' ' . $this->upload->display_errors();
             $this->session->set_flashdata('error', $errors);
+            $this->session->set_flashdata('error', 'Gagak Upload');
         } else {
             // Jika berhasil, siapkan data untuk model
             $upload_data = $this->upload->data();
