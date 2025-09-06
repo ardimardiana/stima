@@ -10,10 +10,13 @@
             <a class="nav-link <?= empty($status_filter) ? 'active' : '' ?>" href="<?= site_url('admin/articles/index/'.$event->event_id) ?>">Semua</a>
         </li>
         <li class="nav-item">
+            <a class="nav-link <?= $status_filter == 'submitted' ? 'active' : '' ?>" href="<?= site_url('admin/articles/index/'.$event->event_id.'/submitted') ?>">Submit</a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link <?= $status_filter == 'in_review' ? 'active' : '' ?>" href="<?= site_url('admin/articles/index/'.$event->event_id.'/in_review') ?>">Proses Review</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link <?= $status_filter == 'revision' ? 'active' : '' ?>" href="<?= site_url('admin/articles/index/'.$event->event_id.'/revision') ?>">Revisi</a>
+            <a class="nav-link <?= $status_filter == 'revision' ? 'active' : '' ?>" href="<?= site_url('admin/articles/index/'.$event->event_id.'/revision') ?>">Proses Revisi</a>
         </li>
         <li class="nav-item">
             <a class="nav-link <?= $status_filter == 'revision_submitted' ? 'active' : '' ?>" href="<?= site_url('admin/articles/index/'.$event->event_id.'/revision_submitted') ?>">Revisi Masuk</a>
@@ -27,7 +30,7 @@
     </ul>
 
     <div class="card shadow-sm">
-        <div class="card-header"><i class="fas fa-file-alt me-2"></i>Daftar Artikel Masuk
+        <div class="card-header"><i class="fas fa-file-alt me-2"></i>Daftar Artikel <?=ucfirst($status_filter)?> : <?=count($articles)?>
             <a href="<?= site_url('admin/articles/export_articles_excel/' . $event->event_id) ?>" class="btn btn-sm btn-success float-end"><i class="fas fa-file-excel me-1"></i> Export ke Excel</a>
         </div>
         <div class="card-body">

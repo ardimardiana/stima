@@ -27,12 +27,58 @@ class Article extends User_Controller {
             show_error('Letter of Acceptance tidak tersedia untuk artikel ini.', 403, 'Akses Ditolak');
             return;
         }
+        
+        $loa = $this->Article_model->get_loa_data($paper_id);
+        
+        if(!$loa->loa_path)
+        {
+            $data=[];
+            $data['ketua_panitia']=$loa->ketua_panitia;
+            $data['nama_event']=$loa->nama_event;
+            $data['nama_penulis']=$loa->nama_depan.' '.$loa->nama_belakang;
+            $data['nomor_surat']=$loa->paper_id.'/LOA/PANITIA/'.$_ENV['SITE_NAME'].'/'.$loa->tahun;
+            $loa_path = $this->tanda_tangan($data);
+            if($loa_path)
+            {
+                $this->Article_model->update_loa_paper($paper_id,$loa_path);
+            }
+            $loa = $this->Article_model->get_loa_data($paper_id);
+        }
     
         // Ambil semua data yang dibutuhkan untuk LoA
-        $data['loa'] = $this->Article_model->get_loa_data($paper_id);
+        $data['loa'] = $loa;
         $data['title'] = 'Letter of Acceptance';
     
         $this->load->view('user/article/loa_template', $data);
+    }
+    
+    function tanda_tangan($data)
+    {
+    	$curl = curl_init();
+    
+    	curl_setopt_array($curl, array(
+    	  CURLOPT_URL => 'https://signature.unma.ac.id/gnrt.php',
+    	  CURLOPT_RETURNTRANSFER => true,
+    	  CURLOPT_ENCODING => '',
+    	  CURLOPT_MAXREDIRS => 10,
+    	  CURLOPT_TIMEOUT => 0,
+    	  CURLOPT_FOLLOWLOCATION => true,
+    	  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    	  CURLOPT_CUSTOMREQUEST => 'POST',
+    	  CURLOPT_POSTFIELDS => array(  'apiKey' => 'RPLUNMA',
+    	            'nama' => $data['ketua_panitia'],
+    	            'identitas' => $_ENV['SITE_NAME'],
+    	            'jabatan' => $data['nama_event'],
+    	            'detail' => $data['nomor_surat'].' a/n '.$data['nama_penulis'],
+    	            'waktu' => date("Y-m-d H-i-s"),
+    	            'apiValue' => '4OCgkWowTp'),
+    	));
+    
+    	$response = curl_exec($curl);
+    
+    	curl_close($curl);
+    	$data = json_decode($response);
+    	return $data->data;
     }
     
     // Fungsi untuk memproses unggahan revisi

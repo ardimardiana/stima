@@ -7,7 +7,7 @@
     
     <?php $this->load->view('admin/event_manager/_nav'); ?>
 
-    <ul class="nav nav-tabs">
+    <ul class="nav nav-tabs mb-4">
         <li class="nav-item">
             <a class="nav-link <?= $status_filter == 'validasi' ? 'active' : '' ?>" href="<?= site_url('admin/participants/index/'.$event->event_id.'/validasi') ?>">Menunggu Validasi</a>
         </li>

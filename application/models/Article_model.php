@@ -3,16 +3,32 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Article_model extends CI_Model {
     
+    public function update_loa_paper($paper_id,$loa_path) {
+        $this->db->where('paper_id', $paper_id);
+        $this->db->set('loa_path', $loa_path);
+        return $this->db->update('tbl_papers');
+    }
+    
     /**
      * Mengambil data jadwal spesifik untuk sebuah paper.
      * @param int $paper_id
      * @return object|null
      */
     public function get_schedule_by_paper($paper_id) {
-        $this->db->select('s.nama_sesi, s.waktu_mulai, s.waktu_selesai, r.nama_ruang, r.lokasi');
-        $this->db->from('tbl_schedules s');
-        $this->db->join('tbl_rooms r', 's.room_id = r.room_id');
-        $this->db->where('s.paper_id', $paper_id);
+        $this->db->select('sess.nama_sesi, sess.waktu_mulai, sess.waktu_selesai, r.nama_ruang, r.lokasi');
+        
+        // Gunakan nama tabel baru: tbl_sessions
+        $this->db->from('tbl_sessions sess');
+        
+        // Join dengan tabel ruangan
+        $this->db->join('tbl_rooms r', 'sess.room_id = r.room_id');
+        
+        // Join dengan tabel penghubung baru: tbl_scheduled_papers
+        $this->db->join('tbl_scheduled_papers sp', 'sess.session_id = sp.session_id');
+        
+        // Kondisi WHERE sekarang pada tabel penghubung
+        $this->db->where('sp.paper_id', $paper_id);
+        
         return $this->db->get()->row();
     }
     
@@ -22,7 +38,7 @@ class Article_model extends CI_Model {
      * @return object|null
      */
     public function get_loa_data($paper_id) {
-        $this->db->select('p.judul, p.paper_id, u.nama_depan, u.nama_belakang, e.*');
+        $this->db->select('p.judul, p.paper_id, u.nama_depan, u.nama_belakang, e.*, p.loa_path');
         $this->db->from('tbl_papers p');
         $this->db->join('tbl_event_registrations er', 'p.registration_id = er.registration_id');
         $this->db->join('tbl_users u', 'er.user_id = u.user_id');
