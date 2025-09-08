@@ -94,5 +94,22 @@ class Article_admin_model extends CI_Model {
         $this->db->order_by('p.tgl_submit', 'DESC');
         return $this->db->get()->result();
     }
+    
+    public function get_articles_by_review($event_id, $status_filter = NULL) {
+        $this->db->select('p.paper_id, p.judul, r.reviewer_name, r.status_review, p.status_artikel, p.file_path_initial, p.file_path_final, p.slide_path, u.nama_depan, u.nama_belakang, t.nama_topik, r.relevansi, r.kualitas_konten, r.orisinalitas,r.gaya_penulisan, r.rekomendasi,r.rekomendasi_best_paper');
+        $this->db->from('tbl_papers p');
+        $this->db->join('tbl_event_registrations er', 'p.registration_id = er.registration_id');
+        $this->db->join('tbl_users u', 'er.user_id = u.user_id');
+        $this->db->join('tbl_reviews r', 'p.paper_id = r.paper_id');
+        $this->db->join('tbl_topics t', 'p.topic_id = t.topic_id');
+        $this->db->where('er.event_id', $event_id);
+        
+        if($status_filter) {
+            $this->db->where('p.status_artikel', $status_filter);
+        }
+        
+        $this->db->order_by('p.tgl_submit', 'DESC');
+        return $this->db->get()->result();
+    }
 
 }

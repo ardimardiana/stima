@@ -243,6 +243,28 @@ class Articles extends Admin_Controller {
         $this->load->view('admin/_partials/_footer');
     }
     
+    public function review($event_id, $status_filter = NULL) {
+        $data['title'] = 'Manajemen Artikel';
+        $data['event'] = $this->Event_model->get_event_by_id($event_id);
+        $data['articles'] = $this->Article_admin_model->get_articles_by_review($event_id, $status_filter);
+        $data['status_filter'] = $status_filter;
+    
+        $this->load->view('admin/_partials/_header', $data);
+        $this->load->view('admin/articles/review', $data);
+        $this->load->view('admin/_partials/_footer');
+    }
+    
+    public function review_final($event_id, $status_filter = NULL) {
+        $data['title'] = 'Manajemen Artikel';
+        $data['event'] = $this->Event_model->get_event_by_id($event_id);
+        $data['articles'] = $this->Article_admin_model->get_articles_by_review($event_id);
+        $data['status_filter'] = $status_filter;
+    
+        $this->load->view('admin/_partials/_header', $data);
+        $this->load->view('admin/articles/review_final', $data);
+        $this->load->view('admin/_partials/_footer');
+    }
+    
     public function export_articles_excel($event_id) {
         $articles = $this->Article_admin_model->get_articles_for_export($event_id);
         $event = $this->Event_model->get_event_by_id($event_id);
