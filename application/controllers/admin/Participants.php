@@ -102,7 +102,7 @@ class Participants extends Admin_Controller {
         $message .= "<a href='{$dashboard_link}'>{$dashboard_link}</a><br><br>";
         $message .= "Hormat kami,<br>Panitia Penyelenggara";
     
-        $this->email->from('no-reply@stima.unma.ac.id', 'Panitia ' . $event_name);
+        $this->email->from($_ENV['EMAIL'], $_ENV['PANITIA']);
         $this->email->to($recipient_email);
         $this->email->subject($subject);
         $this->email->message($message);

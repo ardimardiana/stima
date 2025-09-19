@@ -99,7 +99,7 @@ class Review extends CI_Controller {
 		);
 		$this->load->library('email', $config);
     
-        $this->email->from('no-reply@stima.unma.ac.id', 'Sistem Konferensi (Salinan Review)');
+        $this->email->from($_ENV['EMAIL'], $_ENV['PANITIA']);
         $this->email->to($review_data->reviewer_email);
         $this->email->subject('Salinan Hasil Review Anda untuk Naskah: ' . $review_data->judul);
     

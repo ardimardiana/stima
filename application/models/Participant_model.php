@@ -1,6 +1,22 @@
 <?php
 class Participant_model extends CI_Model {
     
+    /**
+     * Mengambil daftar email & nama unik dari semua pendaftar di sebuah event.
+     * @param int $event_id
+     * @return array
+     */
+    public function get_unique_participants_for_mailing($event_id) {
+        // -- PERBAIKAN DI SINI --
+        // Tulis "DISTINCT" langsung di dalam string select, tanpa dipisahkan koma
+        $this->db->select('DISTINCT u.email, u.nama_depan', FALSE);
+        
+        $this->db->from('tbl_users u');
+        $this->db->join('tbl_event_registrations er', 'u.user_id = er.user_id');
+        $this->db->where('er.event_id', $event_id);
+        return $this->db->get()->result();
+    }
+    
     public function get_attendees_for_export($event_id) {
         $this->db->select(
             'er.registration_id, u.nama_depan, u.nama_belakang, u.email, er.peran_event'

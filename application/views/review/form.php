@@ -67,7 +67,7 @@
                     <div class="mb-4"><label for="catatan_untuk_panitia" class="form-label fw-bold">8. Catatan untuk Panitia (Tidak akan terlihat oleh penulis)</label><textarea name="catatan_untuk_panitia" class="form-control" rows="3"></textarea></div>
                     <div class="mb-4">
                             <label class="form-label">Unggah File (.docx/.pdf)</label>
-                            <input type="file" name="anonymized_file" class="form-control" required>
+                            <input type="file" name="anonymized_file" class="form-control">
                     </div>
                     <hr>
                     <div class="form-check mb-3">

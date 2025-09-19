@@ -115,7 +115,7 @@ class Article extends User_Controller {
             show_404();
             return;
         }
-    
+        //var_dump($_FILES); exit;
         $this->load->library('upload');
         $data_to_update = []; // Siapkan array kosong untuk menampung path file
         $errors = '';
@@ -145,8 +145,8 @@ class Article extends User_Controller {
         // Cek apakah file slide diisi di form
         if (!empty($_FILES['slide_path']['name'])) {
             $config_slide['upload_path']   = './uploads/slides/';
-            $config_slide['allowed_types'] = 'pptx|ppt';
-            $config_slide['max_size']      = 10240; // 10MB
+            $config_slide['allowed_types'] = 'pdf';
+            $config_slide['max_size']      = 5120; // 10MB
             $config_slide['encrypt_name']  = TRUE;
             
             if (!is_dir($config_slide['upload_path'])) { mkdir($config_slide['upload_path'], 0777, TRUE); }

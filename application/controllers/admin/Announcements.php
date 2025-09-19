@@ -35,12 +35,38 @@ class Announcements extends Admin_Controller {
             $this->load->view('admin/announcements/form', $data);
             $this->load->view('admin/_partials/_footer');
         } else {
-            $data = [
+             // 1. Simpan pengumuman seperti biasa
+            $announcement_data = [
                 'event_id' => $event_id,
                 'judul' => $this->input->post('judul'),
                 'isi' => $this->input->post('isi')
             ];
-            $this->Announcement_model->insert($data);
+            $this->Announcement_model->insert($announcement_data);
+    
+            // -- PROSES PENGISIAN ANTRIAN EMAIL --
+            // 2. Ambil daftar email unik
+            $this->load->model('Participant_model');
+            $recipients = $this->Participant_model->get_unique_participants_for_mailing($event_id);
+    
+            if (!empty($recipients)) {
+                $this->load->model('Email_queue_model');
+                $event_data = $this->Event_model->get_event_by_id($event_id);
+                $email_batch = [];
+    
+                // 3. Siapkan data email untuk setiap penerima
+                foreach ($recipients as $recipient) {
+                    $email_batch[] = [
+                        'recipient_email' => $recipient->email,
+                        'subject' => '[PENGUMUMAN] ' . $announcement_data['judul'],
+                        'message' => "Halo {$recipient->nama_depan},<br><br>Ada pengumuman baru dari panitia {$event_data->nama_event}:<br><br><div style='padding:15px; border:1px solid #ddd; background-color:#f9f9f9;'><strong>{$announcement_data['judul']}</strong><br>{$announcement_data['isi']}</div><br><br>Terima kasih.",
+                        'status' => 'pending',
+                        'event_id' => $event_id
+                    ];
+                }
+                // 4. Masukkan semua data ke antrian sekaligus
+                $this->Email_queue_model->add_batch_to_queue($email_batch);
+            }
+            // -- AKHIR PROSES --
             $this->session->set_flashdata('success', 'Pengumuman baru berhasil dibuat.');
             redirect('admin/announcements/event/' . $event_id);
         }

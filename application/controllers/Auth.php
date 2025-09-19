@@ -146,7 +146,7 @@ class Auth extends CI_Controller {
 		);
 		$this->load->library('email', $config);
 
-        $this->email->from('no-reply@stima.unma.ac.id', 'Panitia STIMA UNMA');
+        $this->email->from($_ENV['EMAIL'], $_ENV['PANITIA']);
         $this->email->to($email);
         $this->email->subject('Pendaftaran Akun Berhasil');
         $this->email->message("Halo {$nama},<br><br>Terima kasih telah mendaftar di sistem manajemen konferensi kami. Akun Anda telah berhasil dibuat.<br><br>Silakan login untuk melanjutkan.<br><br>Hormat kami,<br>Panitia");
@@ -231,7 +231,7 @@ class Auth extends CI_Controller {
         
         $reset_link = site_url('auth/reset_password/' . $token);
     
-        $this->email->from('no-reply@stima.unma.ac.id', 'Panitia STIMA UNMA');
+        $this->email->from($_ENV['EMAIL'], $_ENV['PANITIA']);
         $this->email->to($email);
         $this->email->subject('Reset Password Akun Anda');
         $message = "Anda menerima email ini karena ada permintaan untuk mereset password akun Anda.<br><br>";

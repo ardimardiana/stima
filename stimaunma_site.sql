@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Aug 24, 2025 at 11:05 PM
+-- Generation Time: Sep 19, 2025 at 08:01 PM
 -- Server version: 8.0.43
--- PHP Version: 8.4.10
+-- PHP Version: 8.4.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -42,6 +42,23 @@ CREATE TABLE `tbl_authors` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tbl_email_queue`
+--
+
+CREATE TABLE `tbl_email_queue` (
+  `queue_id` int NOT NULL,
+  `recipient_email` varchar(255) NOT NULL,
+  `subject` varchar(255) NOT NULL,
+  `message` text NOT NULL,
+  `status` enum('pending','sent','failed') NOT NULL DEFAULT 'pending',
+  `event_id` int DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `sent_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `tbl_events`
 --
 
@@ -67,6 +84,19 @@ CREATE TABLE `tbl_events` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tbl_event_banners`
+--
+
+CREATE TABLE `tbl_event_banners` (
+  `banner_id` int NOT NULL,
+  `event_id` int NOT NULL,
+  `image_path` varchar(255) NOT NULL,
+  `sort_order` int NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `tbl_event_registrations`
 --
 
@@ -80,7 +110,8 @@ CREATE TABLE `tbl_event_registrations` (
   `status_kehadiran` tinyint(1) NOT NULL DEFAULT '0',
   `sertifikat_path` varchar(255) DEFAULT NULL,
   `sertifikat_presenter_path` varchar(255) DEFAULT NULL,
-  `qr_code_path` varchar(255) DEFAULT NULL
+  `qr_code_path` varchar(255) DEFAULT NULL,
+  `konfirmasi_hadir` enum('menunggu','hadir','tidak_hadir') DEFAULT NULL COMMENT 'Khusus untuk presenter'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -101,7 +132,8 @@ CREATE TABLE `tbl_papers` (
   `file_path_final` varchar(255) DEFAULT NULL,
   `slide_path` varchar(255) DEFAULT NULL,
   `loa_path` varchar(255) DEFAULT NULL,
-  `tgl_submit` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `tgl_submit` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -176,10 +208,10 @@ CREATE TABLE `tbl_reviews` (
   `reviewer_name` varchar(255) DEFAULT NULL,
   `reviewer_email` varchar(255) DEFAULT NULL,
   `reviewer_token` varchar(100) NOT NULL,
-  `token_expires_at` datetime NOT NULL,
+  `token_expires_at` datetime DEFAULT NULL,
   `token_first_accessed_at` datetime DEFAULT NULL COMMENT 'Mencatat kapan token pertama kali dibuka',
   `status_review` enum('pending','opened','submitted') NOT NULL DEFAULT 'pending',
-  `file_for_reviewer_path` varchar(255) DEFAULT NULL,
+  `file_for_reviewer_path` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
   `relevansi` tinyint(1) DEFAULT NULL,
   `kualitas_konten` tinyint(1) DEFAULT NULL,
   `orisinalitas` tinyint(1) DEFAULT NULL,
@@ -188,7 +220,7 @@ CREATE TABLE `tbl_reviews` (
   `saran_perbaikan` text,
   `rekomendasi_best_paper` tinyint(1) DEFAULT '0',
   `catatan_untuk_panitia` text,
-  `reviewed_file_path` varchar(255) DEFAULT NULL,
+  `reviewed_file_path` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
   `tgl_submit_review` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -208,14 +240,26 @@ CREATE TABLE `tbl_rooms` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_schedules`
+-- Table structure for table `tbl_scheduled_papers`
 --
 
-CREATE TABLE `tbl_schedules` (
-  `schedule_id` int NOT NULL,
+CREATE TABLE `tbl_scheduled_papers` (
+  `scheduled_paper_id` int NOT NULL,
+  `session_id` int NOT NULL,
+  `paper_id` int NOT NULL,
+  `sort_order` int NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_sessions`
+--
+
+CREATE TABLE `tbl_sessions` (
+  `session_id` int NOT NULL,
   `event_id` int NOT NULL,
   `room_id` int NOT NULL,
-  `paper_id` int DEFAULT NULL,
   `nama_sesi` varchar(255) NOT NULL,
   `waktu_mulai` datetime NOT NULL,
   `waktu_selesai` datetime NOT NULL
@@ -253,6 +297,9 @@ CREATE TABLE `tbl_users` (
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Indexes for dumped tables
+--
 
 --
 -- Indexes for table `tbl_authors`
@@ -262,6 +309,12 @@ ALTER TABLE `tbl_authors`
   ADD KEY `paper_id` (`paper_id`);
 
 --
+-- Indexes for table `tbl_email_queue`
+--
+ALTER TABLE `tbl_email_queue`
+  ADD PRIMARY KEY (`queue_id`);
+
+--
 -- Indexes for table `tbl_events`
 --
 ALTER TABLE `tbl_events`
@@ -269,11 +322,17 @@ ALTER TABLE `tbl_events`
   ADD UNIQUE KEY `slug_url` (`slug_url`);
 
 --
+-- Indexes for table `tbl_event_banners`
+--
+ALTER TABLE `tbl_event_banners`
+  ADD PRIMARY KEY (`banner_id`),
+  ADD KEY `event_id` (`event_id`);
+
+--
 -- Indexes for table `tbl_event_registrations`
 --
 ALTER TABLE `tbl_event_registrations`
   ADD PRIMARY KEY (`registration_id`),
-  ADD UNIQUE KEY `user_event_unique` (`user_id`,`event_id`),
   ADD KEY `user_id` (`user_id`),
   ADD KEY `event_id` (`event_id`);
 
@@ -331,13 +390,20 @@ ALTER TABLE `tbl_rooms`
   ADD KEY `event_id` (`event_id`);
 
 --
--- Indexes for table `tbl_schedules`
+-- Indexes for table `tbl_scheduled_papers`
 --
-ALTER TABLE `tbl_schedules`
-  ADD PRIMARY KEY (`schedule_id`),
-  ADD KEY `event_id` (`event_id`),
-  ADD KEY `room_id` (`room_id`),
+ALTER TABLE `tbl_scheduled_papers`
+  ADD PRIMARY KEY (`scheduled_paper_id`),
+  ADD KEY `session_id` (`session_id`),
   ADD KEY `paper_id` (`paper_id`);
+
+--
+-- Indexes for table `tbl_sessions`
+--
+ALTER TABLE `tbl_sessions`
+  ADD PRIMARY KEY (`session_id`),
+  ADD KEY `event_id` (`event_id`),
+  ADD KEY `room_id` (`room_id`);
 
 --
 -- Indexes for table `tbl_topics`
@@ -364,10 +430,22 @@ ALTER TABLE `tbl_authors`
   MODIFY `author_id` int NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `tbl_email_queue`
+--
+ALTER TABLE `tbl_email_queue`
+  MODIFY `queue_id` int NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `tbl_events`
 --
 ALTER TABLE `tbl_events`
   MODIFY `event_id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `tbl_event_banners`
+--
+ALTER TABLE `tbl_event_banners`
+  MODIFY `banner_id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tbl_event_registrations`
@@ -418,10 +496,16 @@ ALTER TABLE `tbl_rooms`
   MODIFY `room_id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `tbl_schedules`
+-- AUTO_INCREMENT for table `tbl_scheduled_papers`
 --
-ALTER TABLE `tbl_schedules`
-  MODIFY `schedule_id` int NOT NULL AUTO_INCREMENT;
+ALTER TABLE `tbl_scheduled_papers`
+  MODIFY `scheduled_paper_id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `tbl_sessions`
+--
+ALTER TABLE `tbl_sessions`
+  MODIFY `session_id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tbl_topics`
@@ -433,7 +517,7 @@ ALTER TABLE `tbl_topics`
 -- AUTO_INCREMENT for table `tbl_users`
 --
 ALTER TABLE `tbl_users`
-  MODIFY `user_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `user_id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
@@ -444,6 +528,12 @@ ALTER TABLE `tbl_users`
 --
 ALTER TABLE `tbl_authors`
   ADD CONSTRAINT `fk_author_paper` FOREIGN KEY (`paper_id`) REFERENCES `tbl_papers` (`paper_id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `tbl_event_banners`
+--
+ALTER TABLE `tbl_event_banners`
+  ADD CONSTRAINT `fk_banner_event` FOREIGN KEY (`event_id`) REFERENCES `tbl_events` (`event_id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `tbl_event_registrations`
@@ -491,11 +581,17 @@ ALTER TABLE `tbl_rooms`
   ADD CONSTRAINT `fk_room_event` FOREIGN KEY (`event_id`) REFERENCES `tbl_events` (`event_id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `tbl_schedules`
+-- Constraints for table `tbl_scheduled_papers`
 --
-ALTER TABLE `tbl_schedules`
+ALTER TABLE `tbl_scheduled_papers`
+  ADD CONSTRAINT `fk_schedpaper_paper` FOREIGN KEY (`paper_id`) REFERENCES `tbl_papers` (`paper_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_schedpaper_session` FOREIGN KEY (`session_id`) REFERENCES `tbl_sessions` (`session_id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `tbl_sessions`
+--
+ALTER TABLE `tbl_sessions`
   ADD CONSTRAINT `fk_schedule_event` FOREIGN KEY (`event_id`) REFERENCES `tbl_events` (`event_id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `fk_schedule_paper` FOREIGN KEY (`paper_id`) REFERENCES `tbl_papers` (`paper_id`) ON DELETE SET NULL,
   ADD CONSTRAINT `fk_schedule_room` FOREIGN KEY (`room_id`) REFERENCES `tbl_rooms` (`room_id`) ON DELETE CASCADE;
 
 --

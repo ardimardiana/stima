@@ -166,8 +166,8 @@
                              <div class="alert alert-success mb-0"><h5 class="alert-heading">Artikel Diterima!</h5><p class="mb-2 small">Selamat! Silakan unggah naskah final dan slide presentasi.</p>
                                  <a href="<?= site_url('user/article/generate_loa/' . $registration_id . '/' . $paper->paper_id); ?>" class="btn btn-outline-success" target="_blank"><i class="fas fa-download me-2"></i>Unduh Letter of Acceptance (LoA)</a>
                                  <?= form_open_multipart('user/article/submit_final/' . $registration_id . '/' . $paper->paper_id); ?>
-                                     <div class="mb-2"><label class="form-label small">Naskah Final</label><input type="file" name="file_path_final" class="form-control form-control-sm" accept=".docx" required></div>
-                                     <div class="mb-2"><label class="form-label small">Slide Presentasi</label><input type="file" name="slide_path" class="form-control form-control-sm" accept=".pptx" required></div>
+                                     <div class="mb-2"><label class="form-label small">Naskah Final (*.docx)</label><input type="file" name="file_path_final" class="form-control form-control-sm" accept=".docx" required></div>
+                                     <div class="mb-2"><label class="form-label small">Slide Presentasi (*.pdf)</label><input type="file" name="slide_path" class="form-control form-control-sm" accept=".pdf" required></div>
                                      <button type="submit" class="btn btn-success w-100"><i class="fas fa-flag-checkered me-2"></i>Kirim Final</button>
                                  <?= form_close(); ?>
                              </div>

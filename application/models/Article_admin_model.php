@@ -2,6 +2,17 @@
 class Article_admin_model extends CI_Model {
     
     /**
+     * Mengambil detail dari satu penugasan review.
+     * @param int $review_id
+     * @return array|null
+     */
+    public function get_review_details($review_id) {
+        $review = $this->db->get_where('tbl_reviews', ['review_id' => $review_id])->row_array();
+        // kita return sebagai array agar cocok dengan parameter fungsi _send_review_invitation
+        return $review;
+    }
+    
+    /**
      * Mengambil detail presenter (nama, email, registration_id) berdasarkan paper_id.
      * @param int $paper_id
      * @return object|null

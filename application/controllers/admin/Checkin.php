@@ -68,7 +68,7 @@ class Checkin extends Admin_Controller {
         $recipient_name = $participant_data->nama_depan;
         $event_name = $event_data->nama_event;
     
-        $this->email->from('no-reply@stima.unma.ac.id', 'Panitia ' . $event_name);
+        $this->email->from($_ENV['EMAIL'], $_ENV['PANITIA']);
         $this->email->to($recipient_email);
         $this->email->subject('Konfirmasi Kehadiran di ' . $event_name);
     

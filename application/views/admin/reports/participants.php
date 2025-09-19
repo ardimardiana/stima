@@ -17,8 +17,36 @@
             <a href="<?= site_url('admin/reports/export_all_participants_excel/' . $event->event_id) ?>" class="btn btn-sm btn-success float-end"><i class="fas fa-file-excel me-1"></i> Export Semua (Excel)</a>
         </div>
         <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="filter-peran" class="form-label">Filter Peran</label>
+                    <select id="filter-peran" class="form-select filter-select" data-column-index="4">
+                        <option value="">Semua Peran</option>
+                        <option value="Peserta">Peserta</option>
+                        <option value="Presenter">Presenter</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="filter-pembayaran" class="form-label">Filter Pembayaran</label>
+                    <select id="filter-pembayaran" class="form-select filter-select" data-column-index="5">
+                        <option value="">Semua Status</option>
+                        <option value="Lunas">Lunas</option>
+                        <option value="Ditolak">Ditolak</option>
+                        <option value="Menunggu">Menunggu</option>
+                        <option value="Validasi">Validasi</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="filter-kehadiran" class="form-label">Filter Kehadiran</label>
+                    <select id="filter-kehadiran" class="form-select filter-select" data-column-index="6">
+                        <option value="">Semua Status</option>
+                        <option value="Hadir">Hadir</option>
+                        <option value="Belum Hadir">Belum Hadir</option>
+                    </select>
+                </div>
+            </div>
             <div class="table-responsive">
-                <table id="datatablesSimple" class="table table-striped table-bordered">
+                <table id="participantsTable" class="table table-striped table-bordered">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -87,3 +115,29 @@
         </div>
     </div>
 </div>
+<script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
+<script>
+$(document).ready(function() {
+    // 1. Inisialisasi DataTables
+    const table = $('#participantsTable').DataTable({
+        // Opsi tambahan jika diperlukan, misal:
+        "pageLength": 10,
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.13.8/i18n/id.json"
+        }
+    });
+
+    // 2. Tambahkan event listener untuk setiap dropdown filter
+    $('.filter-select').on('change', function() {
+        // Ambil index kolom dari atribut data-*
+        const columnIndex = $(this).data('column-index');
+        // Ambil nilai yang dipilih
+        const selectedValue = $(this).val();
+
+        // Terapkan filter ke kolom yang sesuai
+        // Gunakan ^...$ untuk pencarian yang sama persis
+        table.column(columnIndex).search(selectedValue ? '^' + selectedValue + '$' : '', true, false).draw();
+    });
+});
+</script>

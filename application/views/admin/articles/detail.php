@@ -138,13 +138,33 @@
                 <div class="card-header"><h5 class="mb-0"><i class="fas fa-users-cog me-2"></i>Reviewer Ditugaskan</h5></div>
                 <ul class="list-group list-group-flush">
                     <?php if(empty($reviews)): ?>
-                        <li class="list-group-item">Belum ada reviewer yang ditugaskan.</li>
+                        <li class="list-group-item text-muted">Belum ada reviewer yang ditugaskan.</li>
                     <?php else: ?>
                         <?php foreach($reviews as $review): ?>
                             <li class="list-group-item">
-                                <strong><?= htmlspecialchars($review->reviewer_name); ?></strong>
-                                <br><small class="text-muted"><?= $review->reviewer_email; ?></small>
-                                <span class="badge bg-info float-end"><?= ucfirst($review->status_review); ?></span>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong><?= htmlspecialchars($review->reviewer_name); ?></strong><br>
+                                        <small class="text-muted"><?= $review->reviewer_email; ?></small>
+                                    </div>
+                                    <div>
+                                        <?php 
+                                            $status = $review->status_review;
+                                            $badge_class = 'bg-secondary';
+                                            if ($status == 'pending') $badge_class = 'bg-warning text-dark';
+                                            else if ($status == 'opened') $badge_class = 'bg-info text-dark';
+                                            else if ($status == 'submitted') $badge_class = 'bg-success';
+                                        ?>
+                                        <span class="badge <?= $badge_class; ?> me-2"><?= ucfirst($status); ?></span>
+                                        
+                                        <?php if ($status != 'submitted'): ?>
+                                            <a href="<?= site_url('admin/articles/resend_review_invitation/' . $review->review_id) ?>" 
+                                               class="btn btn-sm btn-outline-primary" title="Kirim Ulang Email Undangan">
+                                                <i class="fas fa-paper-plane"></i>
+                                            </a>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
                             </li>
                         <?php endforeach; ?>
                     <?php endif; ?>

@@ -26,9 +26,10 @@ class Reports extends Admin_Controller {
         $sheet->setCellValue('A1', 'No');
         $sheet->setCellValue('B1', 'Nama Lengkap');
         $sheet->setCellValue('C1', 'Email');
-        $sheet->setCellValue('D1', 'Peran');
-        $sheet->setCellValue('E1', 'Status Pembayaran');
-        $sheet->setCellValue('F1', 'Status Kehadiran');
+        $sheet->setCellValue('D1', 'Afilasi');
+        $sheet->setCellValue('E1', 'Peran');
+        $sheet->setCellValue('F1', 'Status Pembayaran');
+        $sheet->setCellValue('G1', 'Status Kehadiran');
 
         // Styling Header (Opsional, tapi membuat lebih rapi)
         $headerStyle = [
@@ -45,9 +46,10 @@ class Reports extends Admin_Controller {
             $sheet->setCellValue('A' . $rowNum, $no++);
             $sheet->setCellValue('B' . $rowNum, $p->nama_depan . ' ' . $p->nama_belakang);
             $sheet->setCellValue('C' . $rowNum, $p->email);
-            $sheet->setCellValue('D' . $rowNum, ucfirst($p->peran_event));
-            $sheet->setCellValue('E' . $rowNum, ucfirst($p->status_pembayaran));
-            $sheet->setCellValue('F' . $rowNum, ($p->status_kehadiran == 1) ? 'Hadir' : 'Belum Hadir');
+            $sheet->setCellValue('D' . $rowNum, ucfirst($p->afiliasi));
+            $sheet->setCellValue('E' . $rowNum, ucfirst($p->peran_event));
+            $sheet->setCellValue('F' . $rowNum, ucfirst($p->status_pembayaran));
+            $sheet->setCellValue('G' . $rowNum, ($p->status_kehadiran == 1) ? 'Hadir' : 'Belum Hadir');
             $rowNum++;
         }
 

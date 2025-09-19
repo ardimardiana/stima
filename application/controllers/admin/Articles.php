@@ -77,11 +77,29 @@ class Articles extends Admin_Controller {
         $message .= "<a href='{$article_link}'>{$article_link}</a><br><br>";
         $message .= "Hormat kami,<br>Panitia Penyelenggara";
     
-        $this->email->from('no-reply@stima.unma.ac.id', 'Panitia ' . $event->nama_event);
+        $this->email->from($_ENV['EMAIL'], $_ENV['PANITIA']);
         $this->email->to($presenter->email);
         $this->email->subject($subject);
         $this->email->message($message);
         $this->email->send();
+    }
+    
+    // Tambahkan fungsi baru ini di dalam class Articles
+    public function resend_review_invitation($review_id) {
+        // 1. Ambil data penugasan review dari database
+        $review_data = $this->Article_admin_model->get_review_details($review_id);
+    
+        if ($review_data && $review_data['status_review'] != 'submitted') {
+            // 2. Jika data ada dan belum disubmit, panggil kembali fungsi pengirim email
+            $this->_send_review_invitation($review_data);
+            $this->session->set_flashdata('success', 'Email pengingat berhasil dikirim ulang ke ' . $review_data['reviewer_name']);
+        } else {
+            $this->session->set_flashdata('error', 'Gagal mengirim ulang undangan. Review mungkin sudah disubmit atau data tidak ditemukan.');
+        }
+    
+        // Ambil paper_id dari data untuk redirect kembali ke halaman yang benar
+        $paper_id = $review_data ? $review_data['paper_id'] : 0;
+        redirect('admin/articles/detail/' . $paper_id);
     }
 
     public function assign_reviewer($paper_id) {
@@ -139,7 +157,7 @@ class Articles extends Admin_Controller {
         // Buat link review unik
         $review_link = site_url('review/start/' . $review_data['reviewer_token']);
     
-        $this->email->from('no-reply@stima.unma.ac.id', 'Panitia ' . $event->nama_event);
+        $this->email->from($_ENV['EMAIL'], $_ENV['PANITIA']);
         $this->email->to($review_data['reviewer_email']);
         $this->email->subject('Undangan untuk Mereview Naskah Ilmiah');
     
@@ -195,7 +213,7 @@ class Articles extends Admin_Controller {
     
         $article_link = site_url('user/article/index/' . $presenter->registration_id);
     
-        $this->email->from('no-reply@stima.unma.ac.id', 'Panitia ' . $event->nama_event);
+        $this->email->from($_ENV['EMAIL'], $_ENV['PANITIA']);
         $this->email->to($presenter->email);
         $this->email->subject('Pesan Baru dari Panitia Terkait Artikel Anda');
     
