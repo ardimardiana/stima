@@ -1,71 +1,115 @@
-###################
-What is CodeIgniter
-###################
+# Conference Management System (CMS) Kampus
 
-CodeIgniter is an Application Development Framework - a toolkit - for people
-who build web sites using PHP. Its goal is to enable you to develop projects
-much faster than you could if you were writing code from scratch, by providing
-a rich set of libraries for commonly needed tasks, as well as a simple
-interface and logical structure to access these libraries. CodeIgniter lets
-you creatively focus on your project by minimizing the amount of code needed
-for a given task.
+Sebuah sistem manajemen konferensi berbasis web yang dirancang menggunakan CodeIgniter 3 untuk memfasilitasi seluruh alur kerja akademik, mulai dari pendaftaran peserta dan submisi artikel, proses review *double-blind*, hingga penjadwalan presentasi dan penerbitan sertifikat.
 
-*******************
-Release Information
-*******************
 
-This repo contains in-development code for future releases. To download the
-latest stable release please visit the `CodeIgniter Downloads
-<https://codeigniter.com/download>`_ page.
+---
 
-**************************
-Changelog and New Features
-**************************
+## ✨ Fitur Utama
 
-You can find a list of all changes for each release in the `user
-guide change log <https://github.com/bcit-ci/CodeIgniter/blob/develop/user_guide_src/source/changelog.rst>`_.
+Sistem ini dibagi menjadi empat bagian utama dengan alur kerja yang terintegrasi untuk setiap peran.
 
-*******************
-Server Requirements
-*******************
+### 👨‍💼 Panel Admin
+Panel admin adalah pusat kendali untuk mengelola seluruh aspek konferensi.
 
-PHP version 5.6 or newer is recommended.
+* **Manajemen Multi-Event**: Kemampuan untuk membuat, mengelola, mengaktifkan, dan mengarsipkan beberapa event konferensi dari tahun ke tahun.
+* **Dasbor Pengelolaan Event**: Setiap event memiliki dasbor khususnya sendiri untuk mengelola:
+    * **Banner**: Mengunggah beberapa gambar banner untuk ditampilkan sebagai *carousel* di halaman depan.
+    * **Topik**: Menambah/menghapus topik keilmuan yang relevan untuk submisi artikel.
+    * **Ruangan**: Mendefinisikan ruangan (fisik atau virtual) yang akan digunakan untuk sesi presentasi.
+    * **Pengumuman**: Membuat pengumuman yang otomatis dikirim ke seluruh peserta melalui sistem antrian email.
+* **Manajemen Pengguna**: Melihat, mengedit, dan menghapus data pengguna.
+* **Validasi Pembayaran**: Antarmuka untuk melihat bukti bayar yang diunggah peserta, dengan aksi **Setujui** atau **Tolak** yang akan mengirim notifikasi email otomatis.
+* **Manajemen Artikel & Review**:
+    * Melihat semua artikel yang masuk.
+    * Menugaskan reviewer dengan mengunggah naskah anonim.
+    * Mengirim undangan review (dan mengirim ulang pengingat) melalui email dengan tautan unik.
+    * Melihat hasil review yang masuk dari semua reviewer dalam satu tampilan.
+    * Mengambil keputusan final (**Accepted, Revision, Rejected**) dengan notifikasi email otomatis ke presenter.
+* **Manajemen Jadwal Interaktif**: Antarmuka **drag-and-drop** untuk menyusun jadwal. Admin dapat membuat blok sesi dan menempatkan beberapa artikel ke dalam satu sesi.
+* **Check-in & Sertifikat**:
+    * Halaman **Scanner QR Code** untuk validasi kehadiran peserta.
+    * Pengaturan untuk mengaktifkan/menonaktifkan akses unduh sertifikat.
+    * Fitur **Export/Import CSV** untuk mengelola tautan sertifikat eksternal secara massal.
+* **Komunikasi**: Fitur chat dua arah dengan presenter untuk setiap artikel.
+* **Laporan & Ekspor**:
+    * Melihat daftar lengkap peserta dengan status pembayaran dan kehadiran.
+    * Laporan konsolidasi untuk melihat ringkasan pendaftar (peserta saja, presenter saja, atau keduanya).
+    * Fungsi **Export ke Excel** untuk laporan peserta dan artikel.
 
-It should work on 5.3.7 as well, but we strongly advise you NOT to run
-such old versions of PHP, because of potential security and performance
-issues, as well as missing features.
+### 🧑‍🏫 Panel Peserta & Presenter
+Dasbor personal yang dirancang untuk memandu pengguna melalui setiap tahapan partisipasi.
 
-************
-Installation
-************
+* **Pendaftaran Multi-Peran**: Satu pengguna dapat mendaftar sebagai **Peserta** dan/atau **Presenter** dalam satu event, dengan alur pembayaran yang terpisah.
+* **Alur Pembayaran**: Mengunggah bukti bayar dan menerima notifikasi email otomatis saat divalidasi.
+* **Manajemen Artikel (Presenter)**:
+    * Antarmuka berbasis *stepper* yang memandu proses submisi.
+    * Form submisi awal yang lengkap (judul, abstrak, topik, penulis, upload file `.docx`).
+    * Kemampuan untuk **menghapus dan submit ulang** jika artikel belum diproses.
+    * Melihat masukan dari reviewer dan mengunggah file revisi.
+    * Mengunggah naskah final dan slide presentasi setelah diterima.
+    * Mengunduh **Letter of Acceptance (LoA)** yang digenerate otomatis.
+* **Jadwal Personal**: Menampilkan informasi jadwal (waktu, ruangan, lokasi) yang spesifik untuk presentasi mereka.
+* **Komunikasi**: Fitur chat untuk berdiskusi dengan panitia.
+* **QR Code & Sertifikat**: Mengakses QR Code unik untuk check-in dan mengunduh sertifikat setelah acara (jika hadir dan akses dibuka oleh admin).
+* **Manajemen Profil**: Fasilitas untuk mengedit data diri dan mengunggah foto profil yang akan tampil di halaman "Speakers".
 
-Please see the `installation section <https://codeigniter.com/userguide3/installation/index.html>`_
-of the CodeIgniter User Guide.
+### 🕵️‍♂️ Alur Reviewer
+Dirancang agar semudah mungkin tanpa perlu login.
 
-*******
-License
-*******
+* **Akses Berbasis Token**: Reviewer mengakses halaman review melalui tautan unik dan aman yang dikirim via email.
+* **Formulir Review Lengkap**: Mencakup semua kriteria penilaian standar akademik.
+* **Mekanisme Kedaluwarsa**: Tautan review aktif selama 7 hari sejak pertama kali diakses.
 
-Please see the `license
-agreement <https://github.com/bcit-ci/CodeIgniter/blob/develop/user_guide_src/source/license.rst>`_.
+### 🌐 Halaman Publik
+Tampilan depan yang informatif dan menarik bagi pengunjung.
 
-*********
-Resources
-*********
+* **Halaman Event Dinamis**: Menampilkan banner *carousel*, konten utama, tanggal penting, dan pengumuman sesuai dengan event yang sedang aktif.
+* **Arsip Event**: Pengunjung dapat melihat informasi dari event-event tahun sebelumnya melalui menu riwayat.
+* **Halaman Jadwal & Pembicara**: Halaman khusus untuk melihat grid jadwal acara dan galeri para pembicara yang akan tampil.
+* **Countdown Timer**: Hitung mundur interaktif menuju hari pelaksanaan acara.
 
--  `User Guide <https://codeigniter.com/docs>`_
--  `Contributing Guide <https://github.com/bcit-ci/CodeIgniter/blob/develop/contributing.md>`_
--  `Language File Translations <https://github.com/bcit-ci/codeigniter3-translations>`_
--  `Community Forums <http://forum.codeigniter.com/>`_
--  `Community Wiki <https://github.com/bcit-ci/CodeIgniter/wiki>`_
--  `Community Slack Channel <https://codeigniterchat.slack.com>`_
+---
 
-Report security issues to our `Security Panel <mailto:security@codeigniter.com>`_
-or via our `page on HackerOne <https://hackerone.com/codeigniter>`_, thank you.
+## 🛠️ Teknologi yang Digunakan
 
-***************
-Acknowledgement
-***************
+* **Backend**: PHP 7.4+, CodeIgniter 3
+* **Frontend**: HTML5, CSS3, Bootstrap 5, JavaScript (jQuery & Vanilla JS)
+* **Database**: MySQL
+* **Library Pihak Ketiga**:
+    * **SortableJS**: Untuk fungsionalitas drag-and-drop pada penjadwalan.
+    * **PhpSpreadsheet**: Untuk generate file laporan .xlsx (Excel).
+    * **endroid/qr-code**: Untuk generate QR Code kehadiran.
+    * **Summernote**: Editor WYSIWYG untuk konten event.
+    * **DataTables.net**: Untuk tabel interaktif dengan filter dan paginasi.
+* **Server**: Web server dengan dukungan PHP & MySQL (misal: Apache), Cron Jobs.
 
-The CodeIgniter team would like to thank EllisLab, all the
-contributors to the CodeIgniter project and you, the CodeIgniter user.
+---
+
+## 🚀 Instalasi
+
+1.  Clone repositori ini: `git clone https://github.com/NAMA_USER/NAMA_REPO.git`
+2.  Jalankan `composer install` untuk menginstal semua dependensi PHP.
+3.  Impor file `.sql` yang tersedia ke dalam database MySQL Anda.
+4.  Konfigurasi koneksi database di `application/config/database.php`.
+5.  Sesuaikan `base_url` di `application/config/config.php`.
+6.  Pastikan file `.htaccess` di root direktori sudah dikonfigurasi dengan benar untuk menghilangkan `index.php` dari URL.
+7.  Konfigurasi pengaturan SMTP untuk pengiriman email di `application/config/email.php`.
+8.  Atur **Cron Job** di server Anda untuk menjalankan skrip antrian email:
+    ```bash
+    */15 * * * * /usr/bin/php /path/ke/proyek/anda/index.php cli/cron send_emails
+    ```
+
+---
+
+## 📄 Lisensi
+
+Proyek ini dilisensikan di bawah [MIT License](LICENSE).
+
+---
+
+## 📞 Kontak
+
+Dibuat oleh - [Ardi Mardiana] - [aim@unma.ac.id]
+
+Project Link: [https://github.com/ardimardiana/stima](https://github.com/ardimardiana/stima)
