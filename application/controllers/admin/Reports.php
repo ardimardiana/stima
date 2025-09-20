@@ -12,6 +12,48 @@ class Reports extends Admin_Controller {
         $this->load->model('Event_model');
     }
     
+    // Menampilkan halaman laporan konsolidasi
+    public function consolidated($event_id) {
+        
+        $data['title'] = 'Laporan Konsolidasi Peserta';
+        $data['event'] = $this->Event_model->get_event_by_id($event_id);
+        // Panggil fungsi model yang baru
+        $data['consolidated_participants'] = $this->Participant_model->get_consolidated_participants_report($event_id);
+        
+        if (!$data['event']) {
+            show_404();
+        }
+        
+        // --- PENAMBAHAN LOGIKA KESIMPULAN ---
+        $total_peserta_saja = 0;
+        $total_presenter_saja = 0;
+        $total_keduanya = 0;
+    
+        foreach ($data['consolidated_participants'] as $user) {
+            $is_peserta = isset($user['roles']['peserta']);
+            $is_presenter = isset($user['roles']['presenter']);
+    
+            if ($is_peserta && $is_presenter) {
+                $total_keduanya++;
+            } elseif ($is_peserta) {
+                $total_peserta_saja++;
+            } elseif ($is_presenter) {
+                $total_presenter_saja++;
+            }
+        }
+        
+        // Kirim hasil perhitungan ke view
+        $data['summary'] = [
+            'peserta_saja' => $total_peserta_saja,
+            'presenter_saja' => $total_presenter_saja,
+            'keduanya' => $total_keduanya
+        ];
+    
+        $this->load->view('admin/_partials/_header', $data);
+        $this->load->view('admin/reports/consolidated', $data);
+        $this->load->view('admin/_partials/_footer');
+    }
+    
     public function export_all_participants_excel($event_id) {
         // 1. Ambil data dari model (kita gunakan fungsi yang sudah ada)
         $participants = $this->Participant_model->get_all_participants_for_report($event_id);

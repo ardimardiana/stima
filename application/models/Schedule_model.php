@@ -73,12 +73,30 @@ class Schedule_model extends CI_Model {
                              ->join('tbl_sessions s', 'sp.session_id = s.session_id')
                              ->where('s.event_id', $event_id)
                              ->get_compiled_select();
-
-        $this->db->select('p.paper_id, p.judul')->from('tbl_papers p')
-                 ->join('tbl_event_registrations er', 'p.registration_id = er.registration_id')
-                 ->where('er.event_id', $event_id)
-                 ->where_in('p.status_artikel', ['accepted', 'final_submitted']);
+        // -- PERUBAHAN DIMULAI DI SINI --
+    
+        // 1. Tambahkan kolom penulis dan afiliasi ke SELECT
+        $this->db->select('
+            p.paper_id, 
+            p.judul, 
+            a.nama_depan as author_firstname, 
+            a.nama_belakang as author_lastname, 
+            a.afiliasi as author_affiliation
+        ');
         
+        $this->db->from('tbl_papers p');
+        $this->db->join('tbl_event_registrations er', 'p.registration_id = er.registration_id');
+        
+        // 2. Tambahkan JOIN ke tabel authors
+        $this->db->join('tbl_authors a', 'p.paper_id = a.paper_id');
+        
+        $this->db->where('er.event_id', $event_id);
+        $this->db->where_in('p.status_artikel', ['accepted', 'final_submitted']);
+    
+        // 3. Tambahkan WHERE untuk filter hanya corresponding author
+        $this->db->where('a.is_corresponding_author', 1);
+    
+        // -- AKHIR PERUBAHAN --       
         if (!empty($this->db->query($subquery)->result())) {
             $this->db->where("p.paper_id NOT IN ($subquery)", NULL, FALSE);
         }

@@ -21,7 +21,9 @@
                     <div id="unscheduled-papers" class="list-group paper-list">
                         <?php foreach($unscheduled_papers as $paper): ?>
                             <div class="list-group-item paper-item" data-paper-id="<?= $paper->paper_id; ?>">
-                                <?= htmlspecialchars($paper->judul); ?>
+                                <?= htmlspecialchars($paper->judul); ?><br>
+                                <?= ucfirst($paper->author_firstname) ?> <?= ucfirst($paper->author_lastname) ?> <br>
+                                <?= ucfirst($paper->author_affiliation) ?>
                             </div>
                         <?php endforeach; ?>
                     </div>

@@ -108,6 +108,14 @@ class Article extends User_Controller {
         redirect('user/article/index/' . $registration_id);
     }
     
+    public function check_valid() {
+        echo '<p>jika semua informasi muncul maka dipastikan dokumen berhasil diupload.</p>
+        <p>name (nama dokumen), type (tipe), tmp_name (penyimpanan sementara), error (0), size (ukuran dalam bit)<p>
+        jika ada yang kosong. kemungkinan gagal upload.
+        <pre>';
+        var_dump($_FILES); echo '</pre>'; exit;
+    }
+    
     public function submit_final($registration_id, $paper_id) {
         // Keamanan: Pastikan user adalah pemilik artikel
         $user_id = $this->session->userdata('user_id');

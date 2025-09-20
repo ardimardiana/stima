@@ -21,6 +21,13 @@
     </li>
     
     <li class="nav-item">
+        <a class="nav-link <?= ($this->uri->segment(3) == 'consolidated') ? 'active' : '' ?>" 
+           href="<?= site_url('admin/reports/consolidated/' . $event->event_id) ?>">
+           <i class="fas fa-users-cog me-1"></i> Laporan Konsolidasi
+        </a>
+    </li>
+    
+    <li class="nav-item">
         <a class="nav-link <?= ($this->uri->segment(2) == 'participants') ? 'active' : '' ?>" 
            href="<?= site_url('admin/participants/index/' . $event->event_id) ?>">
            <i class="fas fa-check-circle me-1"></i> Validasi Pembayaran

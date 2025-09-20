@@ -240,6 +240,16 @@
                     </ul>
                 </div>
                 <?php endif; ?>
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header"><h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Check File</h5></div>
+                    <div class="card-body">
+                        <div class="alert alert-secondary mb-2"><p class="mb-0 small">Fitur ini dibuat untuk memastikan valid/ sukses unggah file sebelum melakukan proses unggah.</p></div>
+                        <?= form_open_multipart('user/article/check_valid/'); ?>
+                             <div class="mb-2"><input type="file" name="check_valid" class="form-control" required accept=".docx"></div>
+                             <button type="submit" class="btn btn-success w-100"><i class="fas fa-upload me-2"></i>Check File Saya</button>
+                         <?= form_close(); ?>
+                    </div>
+                </div>
             </aside>
         </div>
         </div>
