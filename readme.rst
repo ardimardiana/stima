@@ -88,7 +88,7 @@ Tampilan depan yang informatif dan menarik bagi pengunjung.
 
 ## 🚀 Instalasi
 
-1.  Clone repositori ini: `git clone https://github.com/NAMA_USER/NAMA_REPO.git`
+1.  Clone repositori ini: `git clone https://github.com/ardimardiana/stima.git`
 2.  Jalankan `composer install` untuk menginstal semua dependensi PHP.
 3.  Impor file `.sql` yang tersedia ke dalam database MySQL Anda.
 4.  Konfigurasi koneksi database di `application/config/database.php`.
