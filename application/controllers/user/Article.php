@@ -299,11 +299,11 @@ class Article extends User_Controller {
         $this->load->model('Event_model');
         $event = $this->Event_model->get_event_by_id($registration_data->event_id);
     
-        if (date('Y-m-d H:i:s') > $event->tgl_batas_submit . ' 23:59:59') {
+        /*if (date('Y-m-d H:i:s') > $event->tgl_batas_submit . ' 23:59:59') {
             $this->session->set_flashdata('error', 'Batas waktu untuk submit artikel telah berakhir.');
             redirect('user/article/index/' . $registration_id);
             return;
-        }
+        }*/
         
         //var_dump($_FILES); exit;
     

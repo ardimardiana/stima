@@ -21,6 +21,11 @@ class Home extends CI_Controller {
         $this->_show_event_page($event);
     }
     
+    public function manual() {
+        $data['title'] = 'Panduan Submisi Artikel';
+        $this->load->view('manual', $data);
+    }
+    
     public function speakers() {
         $active_event = $this->Event_model->get_active_event();
         if (!$active_event) { show_404(); return; }

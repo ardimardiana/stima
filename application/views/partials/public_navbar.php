@@ -28,9 +28,11 @@
         <li class="nav-item">
             <a class="nav-link <?= ($this->uri->segment(2) == 'schedule') ? 'active' : '' ?>" href="<?= site_url('home/schedule'); ?>">Jadwal</a>
         </li>
-        
+        <li class="nav-item">
+            <a class="nav-link " href="<?= site_url('home/manual'); ?>" target="_blank">Panduan</a>
+        </li>
         <?php if ($is_active_event): ?>
-            <li class="nav-item ms-lg-3"><a class="btn btn-outline-light" href="<?= site_url('auth/login'); ?>">Login</a></li>
+            <li class="nav-item ms-lg-3"><a class="btn btn-outline-light mb-2" href="<?= site_url('auth/login'); ?>">Login</a></li>
             <li class="nav-item ms-lg-2"><a class="btn btn-primary" href="<?= site_url('auth/register'); ?>">Daftar</a></li>
         <?php endif; ?>
       </ul>

@@ -96,7 +96,7 @@
         <!-- =================================================================== -->
 
         <!-- Bagian Riwayat Event (Tetap Sama) -->
-        <div class="card shadow-sm">
+        <div class="card shadow-sm mb-4">
          <div class="card-header">
             <h4 class="mb-0"><i class="fas fa-history me-2"></i>Riwayat Partisipasi Event</h4>
         </div>
