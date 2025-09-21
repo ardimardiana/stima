@@ -8,6 +8,30 @@ class Dashboard extends User_Controller {
         $this->load->model('User_model'); // Load model baru kita
         $this->load->model('Event_model');
     }
+    
+        // Tambahkan fungsi baru ini di dalam class Dashboard
+    public function cancel_registration($registration_id) {
+        // Keamanan 1: Pastikan user adalah pemilik registrasi
+        $user_id = $this->session->userdata('user_id');
+        if (!$this->User_model->is_registration_owner($registration_id, $user_id)) {
+            show_404(); 
+            return;
+        }
+        
+        // Keamanan 2: Ambil data pembayaran dan pastikan statusnya 'menunggu'
+        $payment = $this->db->get_where('tbl_payments', ['registration_id' => $registration_id])->row();
+    
+        if ($payment && ($payment->status_pembayaran == 'menunggu' || $payment->status_pembayaran == 'ditolak')) {
+            // Hapus data dari tbl_event_registrations.
+            // Data di tbl_payments akan otomatis terhapus karena ON DELETE CASCADE.
+            $this->db->delete('tbl_event_registrations', ['registration_id' => $registration_id]);
+            $this->session->set_flashdata('success', 'Pendaftaran berhasil dibatalkan.');
+        } else {
+            $this->session->set_flashdata('error', 'Pendaftaran tidak dapat dibatalkan karena sudah dalam proses pembayaran atau validasi.');
+        }
+    
+        redirect('user/dashboard');
+    }
 
     public function index() {
         $user_id = $this->session->userdata('user_id');

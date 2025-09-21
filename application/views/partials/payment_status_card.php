@@ -6,7 +6,13 @@
 <?php if($payment_status == 'menunggu'): ?>
     <div class="alert alert-warning mb-0">
         <p class="mb-1"><strong>Status Anda:</strong> Menunggu Pembayaran.</p>
-        <a href="<?= site_url('user/payment/index/' . $registration->registration_id); ?>" class="btn btn-sm btn-primary">Lakukan Pembayaran Sekarang</a>
+        <a href="<?= site_url('user/payment/index/' . $registration->registration_id); ?>" class="btn btn-sm btn-primary mb-2">Lakukan Pembayaran Sekarang</a>
+        
+        <a href="<?= site_url('user/dashboard/cancel_registration/' . $registration->registration_id); ?>" 
+           class="btn btn-sm btn-outline-danger" 
+           onclick="return confirm('Anda yakin ingin membatalkan pendaftaran untuk peran ini?')">
+            Batalkan Pendaftaran
+        </a>
     </div>
 <?php elseif($payment_status == 'validasi'): ?>
     <div class="alert alert-info mb-0">
@@ -15,7 +21,13 @@
 <?php elseif($payment_status == 'ditolak'): ?>
     <div class="alert alert-danger mb-0">
         <p class="mb-1"><strong>Status Anda:</strong> Pembayaran ditolak. Mohon periksa kembali bukti transfer Anda.</p>
-        <a href="<?= site_url('user/payment/index/' . $registration->registration_id); ?>" class="btn btn-sm btn-danger">Upload Ulang Bukti Bayar</a>
+        <a href="<?= site_url('user/payment/index/' . $registration->registration_id); ?>" class="btn btn-sm btn-danger mb-2">Upload Ulang Bukti Bayar</a>
+        
+        <a href="<?= site_url('user/dashboard/cancel_registration/' . $registration->registration_id); ?>" 
+           class="btn btn-sm btn-outline-danger" 
+           onclick="return confirm('Anda yakin ingin membatalkan pendaftaran untuk peran ini?')">
+            Batalkan Pendaftaran
+        </a>
     </div>
 <?php elseif($payment_status == 'lunas'): ?>
     <div class="alert alert-success mb-0">

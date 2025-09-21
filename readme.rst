@@ -2,7 +2,8 @@
 
 Sebuah sistem manajemen konferensi berbasis web yang dirancang menggunakan CodeIgniter 3 untuk memfasilitasi seluruh alur kerja akademik, mulai dari pendaftaran peserta dan submisi artikel, proses review *double-blind*, hingga penjadwalan presentasi dan penerbitan sertifikat.
 
-
+![Gemini](https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Google_Gemini_logo.svg/330px-Google_Gemini_logo.svg.png)
+Kode ini dibantu oleh Google Gemini pada proses Pembuatannya.
 ---
 
 ## ✨ Fitur Utama
@@ -44,7 +45,7 @@ Dasbor personal yang dirancang untuk memandu pengguna melalui setiap tahapan par
 * **Alur Pembayaran**: Mengunggah bukti bayar dan menerima notifikasi email otomatis saat divalidasi.
 * **Manajemen Artikel (Presenter)**:
     * Antarmuka berbasis *stepper* yang memandu proses submisi.
-    * Form submisi awal yang lengkap (judul, abstrak, topik, penulis, upload file `.docx`).
+    * Form submisi awal yang lengkap (judul, abstrak, topik, penulis, upload file '.docx').
     * Kemampuan untuk **menghapus dan submit ulang** jika artikel belum diproses.
     * Melihat masukan dari reviewer dan mengunggah file revisi.
     * Mengunggah naskah final dan slide presentasi setelah diterima.
@@ -88,17 +89,17 @@ Tampilan depan yang informatif dan menarik bagi pengunjung.
 
 ## 🚀 Instalasi
 
-1.  Clone repositori ini: `git clone https://github.com/ardimardiana/stima.git`
-2.  Jalankan `composer install` untuk menginstal semua dependensi PHP.
-3.  Impor file `.sql` yang tersedia ke dalam database MySQL Anda.
-4.  Konfigurasi koneksi database di `application/config/database.php`.
-5.  Sesuaikan `base_url` di `application/config/config.php`.
-6.  Pastikan file `.htaccess` di root direktori sudah dikonfigurasi dengan benar untuk menghilangkan `index.php` dari URL.
-7.  Konfigurasi pengaturan SMTP untuk pengiriman email di `application/config/email.php`.
+1.  Clone repositori ini: 'git clone https://github.com/ardimardiana/stima.git'
+2.  Jalankan 'composer install' untuk menginstal semua dependensi PHP.
+3.  Impor file '.sql' yang tersedia ke dalam database MySQL Anda.
+4.  Konfigurasi koneksi database di 'application/config/database.php'.
+5.  Sesuaikan 'base_url' di 'application/config/config.php'.
+6.  Pastikan file '.htaccess' di root direktori sudah dikonfigurasi dengan benar untuk menghilangkan 'index.php' dari URL.
+7.  Konfigurasi pengaturan SMTP untuk pengiriman email di 'application/config/email.php'.
 8.  Atur **Cron Job** di server Anda untuk menjalankan skrip antrian email:
-    ```bash
+    '''bash
     */15 * * * * /usr/bin/php /path/ke/proyek/anda/index.php cli/cron send_emails
-    ```
+    '''
 
 ---
 
@@ -112,4 +113,4 @@ Proyek ini dilisensikan di bawah [MIT License](LICENSE).
 
 Dibuat oleh - [Ardi Mardiana] - [aim@unma.ac.id]
 
-Project Link: [https://github.com/ardimardiana/stima](https://github.com/ardimardiana/stima)
+Project Link: [https://github.com/ardimardiana/stima]

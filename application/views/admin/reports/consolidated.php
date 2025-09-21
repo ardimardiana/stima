@@ -61,7 +61,7 @@
                     <tbody>
                         <?php foreach($consolidated_participants as $user): ?>
                         <tr>
-                            <td><?= htmlspecialchars($user['nama_lengkap']); ?></td>
+                            <td><?= htmlspecialchars($user['nama_lengkap']); ?> (<?= $user['user_id']; ?>)</td>
                             <td><?= htmlspecialchars($user['afiliasi']); ?></td>
                             <td class="text-center">
                                 <?php if (isset($user['roles']['peserta'])): ?>

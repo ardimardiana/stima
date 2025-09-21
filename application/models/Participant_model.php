@@ -25,6 +25,7 @@ class Participant_model extends CI_Model {
                 $consolidated_data[$user_id] = [
                     'nama_lengkap' => $reg->nama_depan . ' ' . $reg->nama_belakang,
                     'afiliasi'     => $reg->afiliasi,
+                    'user_id'     => $reg->user_id,
                     'roles'        => [] // Siapkan array untuk menampung peran
                 ];
             }

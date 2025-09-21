@@ -17,6 +17,9 @@
         .stepper-item.completed::after { position: absolute; content: ""; border-bottom: 2px solid #198754; width: 100%; top: 20px; left: 50%; z-index: 3; }
         .step-counter { position: relative; z-index: 5; display: flex; justify-content: center; align-items: center; width: 40px; height: 40px; border-radius: 50%; background: #ccc; margin-bottom: 6px; color: white;}
         .step-name { font-size: 14px; font-weight: 600; }
+        .stepper-item:last-child::after {
+            content: none;
+        }
     </style>
 </head>
 <body>
@@ -35,9 +38,21 @@
 
         <?php 
             $status = $paper ? $paper->status_artikel : 'belum_submit';
+            
+            // --- AWAL LOGIKA STEPPER BARU ---
+        
+            // Step 1 selesai jika status BUKAN 'belum_submit'
             $step1_class = ($status != 'belum_submit') ? 'completed' : '';
-            $step2_class = ($status == 'in_review' || $status == 'revision' || $status == 'revision_submitted' || $status == 'rejected' || $status == 'final_submitted') ? 'completed' : '';
-            $step3_class = ($status == 'accepted' ) ? 'completed' : '';
+        
+            // Step 2 selesai jika proses review sudah dilewati (sudah ada keputusan final)
+            $step2_completed_statuses = ['accepted', 'final_submitted', 'rejected'];
+            $step2_class = in_array($status, $step2_completed_statuses) ? 'completed' : '';
+        
+            // Step 3 selesai jika presenter sudah mengunggah semua dokumen final
+            $step3_class = ($status == 'final_submitted') ? 'completed' : '';
+        
+            // --- AKHIR LOGIKA STEPPER BARU ---
+        
             $is_submission_open = (date('Y-m-d H:i:s') <= $event->tgl_batas_submit . ' 23:59:59');
         ?>
 
@@ -172,8 +187,13 @@
                                  <?= form_close(); ?>
                              </div>
                         <?php elseif($status == 'final_submitted'): ?>
-                             <div class="alert alert-success mb-0"><h5 class="alert-heading">Artikel Diterima!</h5><p class="mb-2 small">Selamat! Silakan unggah naskah final dan slide presentasi.</p>
+                             <div class="alert alert-success mb-0"><h5 class="alert-heading">Anda Siap Presentasi!</h5><p class="mb-2 small">Jika dibutuhkan, anda bisa mengunggah ulah dokumen anda.</p>
                                  <a href="<?= site_url('user/article/generate_loa/' . $registration_id . '/' . $paper->paper_id); ?>" class="btn btn-outline-success" target="_blank"><i class="fas fa-download me-2"></i>Unduh Letter of Acceptance (LoA)</a>
+                                 <?= form_open_multipart('user/article/submit_final/' . $registration_id . '/' . $paper->paper_id); ?>
+                                     <div class="mb-2"><label class="form-label small">Naskah Final (*.docx)</label><input type="file" name="file_path_final" class="form-control form-control-sm" accept=".docx" required></div>
+                                     <div class="mb-2"><label class="form-label small">Slide Presentasi (*.pdf)</label><input type="file" name="slide_path" class="form-control form-control-sm" accept=".pdf" required></div>
+                                     <button type="submit" class="btn btn-success w-100"><i class="fas fa-flag-checkered me-2"></i>Kirim Ulang Final</button>
+                                 <?= form_close(); ?>
                              </div>
                          <?php elseif($status == 'rejected'): ?>
                              <div class="alert alert-danger mb-0"><h5 class="alert-heading">Ditolak</h5><p class="mb-0 small">Artikel Anda belum dapat diterima pada kesempatan ini.</p></div>
@@ -224,7 +244,7 @@
                 <?php endif; ?>
 
                 <?php if(!empty($reviews)): ?>
-                <div class="card shadow-sm">
+                <div class="card shadow-sm mb-4">
                     <div class="card-header"><h5 class="mb-0"><i class="fas fa-comment-dots me-2"></i>Masukan dari Reviewer</h5></div>
                     <ul class="list-group list-group-flush">
                         <?php foreach($reviews as $review): ?>
@@ -243,7 +263,7 @@
                 <div class="card shadow-sm mb-4">
                     <div class="card-header"><h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Check File</h5></div>
                     <div class="card-body">
-                        <div class="alert alert-secondary mb-2"><p class="mb-0 small">Fitur ini dibuat untuk memastikan valid/ sukses unggah file sebelum melakukan proses unggah.</p></div>
+                        <div class="alert alert-danger mb-2"><p class="mb-0 small">Fitur ini dibuat untuk memastikan valid/ sukses unggah file sebelum melakukan proses unggah.</p></div>
                         <?= form_open_multipart('user/article/check_valid/'); ?>
                              <div class="mb-2"><input type="file" name="check_valid" class="form-control" required accept=".docx"></div>
                              <button type="submit" class="btn btn-success w-100"><i class="fas fa-upload me-2"></i>Check File Saya</button>
