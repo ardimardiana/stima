@@ -2,7 +2,6 @@
 
 Sebuah sistem manajemen konferensi berbasis web yang dirancang menggunakan CodeIgniter 3 untuk memfasilitasi seluruh alur kerja akademik, mulai dari pendaftaran peserta dan submisi artikel, proses review *double-blind*, hingga penjadwalan presentasi dan penerbitan sertifikat.
 
-![Gemini](https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Google_Gemini_logo.svg/330px-Google_Gemini_logo.svg.png)
 Kode ini dibantu oleh Google Gemini pada proses Pembuatannya.
 ---
 
