@@ -8,7 +8,7 @@ class Email_queue_model extends CI_Model {
     }
     
     public function get_pending_emails($limit) {
-        $this->db->where('status', '!=sent');
+        $this->db->where('status!="sent"');
         $this->db->limit($limit);
         return $this->db->get('tbl_email_queue')->result();
     }

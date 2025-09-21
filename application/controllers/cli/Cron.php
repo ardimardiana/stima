@@ -14,7 +14,7 @@ class Cron extends CI_Controller {
     // Fungsi yang akan dipanggil cron job
     public function send_emails($limit = 20) {
         $pending_emails = $this->Email_queue_model->get_pending_emails((int)$limit);
-
+        //var_dump($pending_emails); exit;
         echo "Mencoba mengirim " . count($pending_emails) . " email...\n";
         
         foreach ($pending_emails as $mail) {
