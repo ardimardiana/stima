@@ -60,7 +60,7 @@
                                     Daftar sebagai Peserta
                                 </button>
                             <?= form_close(); ?>
-                        <?php else: ?>
+                        <?php  else: ?>
                             <div class="alert alert-warning mb-0">Pendaftaran untuk peserta umum telah ditutup.</div>
                         <?php endif; ?>
                     <?php else: ?>

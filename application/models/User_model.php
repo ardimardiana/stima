@@ -1,6 +1,14 @@
 <?php
 class User_model extends CI_Model {
     
+    // Tambahkan fungsi ini di User_model.php
+    public function check_existing_registration($user_id, $event_id, $peran) {
+        $this->db->where('user_id', $user_id);
+        $this->db->where('event_id', $event_id);
+        $this->db->where('peran_event', $peran);
+        return $this->db->count_all_results('tbl_event_registrations');
+    }
+    
     public function get_user_details($user_id) {
         return $this->db->get_where('tbl_users', ['user_id' => $user_id])->row();
     }
