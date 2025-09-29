@@ -180,7 +180,7 @@ class Reports extends Admin_Controller {
             
             unlink($file_path); // Hapus file sementara
         }
-        redirect('admin/reports/participants/' . $event_id);
+        redirect('admin/reports/index/' . $event_id);
     }
     
     public function export_attendees($event_id) {
@@ -214,8 +214,8 @@ class Reports extends Admin_Controller {
                 $row['nama_depan'] . ' ' . $row['nama_belakang'],
                 $row['email'],
                 $row['peran_event'],
-                '', // Kolom sertifikat_path sengaja dikosongkan
-                ''  // Kolom sertifikat_presenter_path sengaja dikosongkan
+                $row['sertifikat_path'], // Kolom sertifikat_path sengaja dikosongkan
+                $row['sertifikat_presenter_path']  // Kolom sertifikat_presenter_path sengaja dikosongkan
             ];
             fputcsv($output, $csv_row);
         }

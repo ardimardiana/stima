@@ -35,16 +35,17 @@
                     <input type="password" class="form-control" name="password" id="password" required>
                     <?= form_error('password', '<small class="text-danger">', '</small>'); ?>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">Captcha</label>
-                    <div class="d-flex align-items-center">
-                        <span class="me-3 captcha-img"><?= $captcha_image; ?></span>
-                        <input type="text" class="form-control" name="captcha" placeholder="Masukkan 4 digit" required>
-                    </div>
-                    <?= form_error('captcha', '<small class="text-danger">', '</small>'); ?>
-                </div>
+                <div
+                    class="cf-turnstile"
+                    data-sitekey="<?=$_ENV['turnstile_pub']?>"
+                    data-theme="auto"
+                    data-size="flexible"
+                    data-callback="onTurnstileSuccess"
+                    data-error-callback="onTurnstileError"
+                    data-expired-callback="onTurnstileExpired"
+                  ></div>
                 <div class="d-grid">
-                    <button type="submit" class="btn btn-primary">Login</button>
+                    <button type="submit" class="btn btn-primary" id="submit-btn" disabled>Login</button>
                 </div>
             <?= form_close(); ?>
 
@@ -58,3 +59,22 @@
     </div>
 </body>
 </html>
+<script
+  src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+  async
+  defer
+></script>
+<script>
+  function onTurnstileSuccess(token) {
+    console.log("Turnstile success:", token);
+    document.getElementById("submit-btn").disabled = false;
+  }
+  function onTurnstileError(errorCode) {
+    console.error("Turnstile error:", errorCode);
+    document.getElementById("submit-btn").disabled = true;
+  }
+  function onTurnstileExpired() {
+    console.warn("Turnstile token expired");
+    document.getElementById("submit-btn").disabled = true;
+  }
+</script>

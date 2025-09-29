@@ -21,9 +21,10 @@ class Schedule_model extends CI_Model {
     
         // 2. Ambil semua paper yang terjadwal dalam satu query
         $session_ids = array_column($sessions, 'session_id');
-        $this->db->select('sp.session_id, sp.paper_id, p.judul, GROUP_CONCAT(CONCAT(a.nama_depan, " ", a.nama_belakang) SEPARATOR ", ") as authors');
+        $this->db->select('sp.session_id, sp.paper_id, p.judul, GROUP_CONCAT(CONCAT(a.nama_depan, " ", a.nama_belakang) SEPARATOR ", ") as authors, c.nama_topik');
         $this->db->from('tbl_scheduled_papers sp');
         $this->db->join('tbl_papers p', 'sp.paper_id = p.paper_id');
+        $this->db->join('tbl_topics c', 'c.topic_id = p.topic_id');
         $this->db->join('tbl_authors a', 'p.paper_id = a.paper_id');
         $this->db->where_in('sp.session_id', $session_ids);
         $this->db->group_by('sp.scheduled_paper_id');
@@ -81,10 +82,12 @@ class Schedule_model extends CI_Model {
             p.judul, 
             a.nama_depan as author_firstname, 
             a.nama_belakang as author_lastname, 
-            a.afiliasi as author_affiliation
+            a.afiliasi as author_affiliation,
+            c.nama_topik
         ');
         
         $this->db->from('tbl_papers p');
+        $this->db->join('tbl_topics c', 'c.topic_id = p.topic_id');
         $this->db->join('tbl_event_registrations er', 'p.registration_id = er.registration_id');
         
         // 2. Tambahkan JOIN ke tabel authors

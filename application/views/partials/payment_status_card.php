@@ -50,7 +50,7 @@
                         <h5>Sertifikat Anda</h5>
                         <?php if ($active_event->sertifikat_aktif == 1): ?>
                             <p>Silakan unduh sertifikat Anda di bawah ini:</p>
-                            <a href="<?= base_url($registration->sertifikat_path) ?>" class="btn btn-sm btn-info"><i class="fas fa-download me-1"></i> Unduh Sertifikat Peserta</a>
+                            <a href="<?= $registration->sertifikat_path ?>" class="btn btn-sm btn-info"><i class="fas fa-download me-1"></i> Unduh Sertifikat Peserta</a>
                         <?php else: ?>
                             <p class="text-muted">Sertifikat akan tersedia untuk diunduh setelah panitia mengaktifkan akses.</p>
                         <?php endif; ?>
@@ -65,7 +65,7 @@
                         <h5>Sertifikat Anda</h5>
                         <?php if ($active_event->sertifikat_aktif == 1): ?>
                             <p>Silakan unduh sertifikat Anda di bawah ini:</p>
-                            <a href="<?= base_url($registration->sertifikat_presenter_path) ?>" class="btn btn-sm btn-info"><i class="fas fa-download me-1"></i> Unduh Sertifikat Peserta</a>
+                            <a href="<?= $registration->sertifikat_presenter_path ?>" class="btn btn-sm btn-info"><i class="fas fa-download me-1"></i> Unduh Sertifikat Peserta</a>
                         <?php else: ?>
                             <p class="text-muted">Sertifikat akan tersedia untuk diunduh setelah panitia mengaktifkan akses.</p>
                         <?php endif; ?>

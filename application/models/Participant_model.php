@@ -55,7 +55,7 @@ class Participant_model extends CI_Model {
     
     public function get_attendees_for_export($event_id) {
         $this->db->select(
-            'er.registration_id, u.nama_depan, u.nama_belakang, u.email, er.peran_event'
+            'er.registration_id, u.nama_depan, u.nama_belakang, u.email, er.peran_event, er.sertifikat_path, er.sertifikat_presenter_path'
         );
         $this->db->from('tbl_event_registrations er');
         $this->db->join('tbl_users u', 'er.user_id = u.user_id');

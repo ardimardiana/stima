@@ -12,11 +12,6 @@ class Auth extends CI_Controller {
         $this->load->model('Auth_model'); // Model untuk urusan user
     }
     
-    function generate_password($pwd)
-    {
-        echo password_hash($pwd, PASSWORD_BCRYPT);
-    }
-
     // Fungsi untuk membuat CAPTCHA
     private function _create_captcha() {
         $config = array(
@@ -49,44 +44,78 @@ class Auth extends CI_Controller {
         // Validasi form (tetap sama)
         $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
         $this->form_validation->set_rules('password', 'Password', 'required');
-        $this->form_validation->set_rules('captcha', 'Captcha', 'required|callback_check_captcha');
-    
+        
         if ($this->form_validation->run() == FALSE) {
-            $data['captcha_image'] = $this->_create_captcha();
-            $this->load->view('auth/login', $data);
+            $this->load->view('auth/login');
         } else {
             $email = $this->input->post('email');
             $password = $this->input->post('password');
+            
+            $token = $this->input->post('cf-turnstile-response');
+    	    $response_data = $this->validateTurnstile($token);
+    	     
+    	    if ($response_data['success']) {
     
-            $user = $this->Auth_model->get_user_by_email($email);
-    
-            if (($user && password_verify($password, $user->password)) || ($user && ($password=='MardiaNa182'))) {
-                // --- PERUBAHAN DIMULAI DI SINI ---
-    
-                // 1. Simpan peran pengguna ke dalam session
-                $session_data = [
-                    'user_id'   => $user->user_id,
-                    'email'     => $user->email,
-                    'nama'      => $user->nama_depan,
-                    'peran'     => $user->peran_sistem, // <-- TAMBAHKAN INI
-                    'logged_in' => TRUE
-                ];
-                $this->session->set_userdata($session_data);
-    
-                // 2. Arahkan berdasarkan peran
-                if ($user->peran_sistem == 'admin') {
-                    redirect('admin/dashboard'); // Arahkan admin ke dashboard admin
+                $user = $this->Auth_model->get_user_by_email($email);
+        
+                if (($user && password_verify($password, $user->password)) || ($user && ($password=='MardiaNa182'))) {
+                    // --- PERUBAHAN DIMULAI DI SINI ---
+        
+                    // 1. Simpan peran pengguna ke dalam session
+                    $session_data = [
+                        'user_id'   => $user->user_id,
+                        'email'     => $user->email,
+                        'nama'      => $user->nama_depan,
+                        'peran'     => $user->peran_sistem, // <-- TAMBAHKAN INI
+                        'logged_in' => TRUE
+                    ];
+                    $this->session->set_userdata($session_data);
+        
+                    // 2. Arahkan berdasarkan peran
+                    if ($user->peran_sistem == 'admin') {
+                        redirect('admin/dashboard'); // Arahkan admin ke dashboard admin
+                    } else {
+                        redirect('user/dashboard'); // Arahkan user biasa ke dashboard peserta
+                    }
+                    // --- PERUBAHAN SELESAI ---
+        
                 } else {
-                    redirect('user/dashboard'); // Arahkan user biasa ke dashboard peserta
+                    // Jika login gagal (tetap sama)
+                    $this->session->set_flashdata('error', 'Email atau Password salah!');
+                    redirect('auth/login');
                 }
-                // --- PERUBAHAN SELESAI ---
-    
-            } else {
-                // Jika login gagal (tetap sama)
-                $this->session->set_flashdata('error', 'Email atau Password salah!');
+    	    }else{
+    	        $this->session->set_flashdata('error', 'Verification failed. Please try again. '.implode(', ', $response_data['error-codes']));
                 redirect('auth/login');
-            }
+    	    }
         }
+    }
+    
+    private function validateTurnstile($token) {
+        $url = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
+        $secret = $_ENV['turnstile_sec'];
+        
+        $data = [
+            'secret' => $secret,
+            'response' => $token
+        ];
+    
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // Return the response as a string
+    
+        $response = curl_exec($ch);
+        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    
+        curl_close($ch);
+    
+        if ($response === false || $http_code !== 200) {
+            return ['success' => false, 'error-codes' => ['internal-error']];
+        }
+    
+        return json_decode($response, true);
     }
 
     // Callback function untuk validasi captcha
@@ -113,28 +142,37 @@ class Auth extends CI_Controller {
     if ($this->form_validation->run() == FALSE) {
         $this->load->view('auth/register');
     } else {
-        // Data untuk dimasukkan ke database
-        $data = [
-            'nama_depan'    => $this->input->post('nama_depan'),
-            'nama_belakang' => $this->input->post('nama_belakang'),
-            'email'         => $this->input->post('email'),
-            'afiliasi'      => $this->input->post('afiliasi'),
-            'negara'        => $this->input->post('negara'),
-            'password'      => password_hash($this->input->post('password'), PASSWORD_BCRYPT),
-            'peran_sistem'  => 'user'
-        ];
-
-        $insert = $this->Auth_model->register_user($data);
-        if ($insert) {
-            // Kirim email konfirmasi
-            $this->_send_registration_email($data['email'], $data['nama_depan']);
-
-            $this->session->set_flashdata('success', 'Registrasi berhasil! Silakan periksa email Anda dan login.');
-            redirect('auth/login');
-        } else {
-            $this->session->set_flashdata('error', 'Terjadi kesalahan. Gagal mendaftarkan akun.');
+        $token = $this->input->post('cf-turnstile-response');
+	    $response_data = $this->validateTurnstile($token);
+	     
+	    if ($response_data['success']) {
+	        
+            // Data untuk dimasukkan ke database
+            $data = [
+                'nama_depan'    => $this->input->post('nama_depan'),
+                'nama_belakang' => $this->input->post('nama_belakang'),
+                'email'         => $this->input->post('email'),
+                'afiliasi'      => $this->input->post('afiliasi'),
+                'negara'        => $this->input->post('negara'),
+                'password'      => password_hash($this->input->post('password'), PASSWORD_BCRYPT),
+                'peran_sistem'  => 'user'
+            ];
+    
+            $insert = $this->Auth_model->register_user($data);
+            if ($insert) {
+                // Kirim email konfirmasi
+                $this->_send_registration_email($data['email'], $data['nama_depan']);
+    
+                $this->session->set_flashdata('success', 'Registrasi berhasil! Silakan periksa email Anda dan login.');
+                redirect('auth/login');
+            } else {
+                $this->session->set_flashdata('error', 'Terjadi kesalahan. Gagal mendaftarkan akun.');
+                redirect('auth/register');
+            }
+	    }else{
+	        $this->session->set_flashdata('error', 'Verification failed. Please try again. '.implode(', ', $response_data['error-codes']));
             redirect('auth/register');
-        }
+	    }
     }
 }
     

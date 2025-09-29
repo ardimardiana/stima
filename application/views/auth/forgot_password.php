@@ -26,8 +26,17 @@
                     <input type="email" class="form-control" name="email" required>
                     <?= form_error('email', '<small class="text-danger">', '</small>'); ?>
                 </div>
+                <div
+                    class="cf-turnstile"
+                    data-sitekey="<?=$_ENV['turnstile_pub']?>"
+                    data-theme="auto"
+                    data-size="flexible"
+                    data-callback="onTurnstileSuccess"
+                    data-error-callback="onTurnstileError"
+                    data-expired-callback="onTurnstileExpired"
+                  ></div>
                 <div class="d-grid">
-                    <button type="submit" class="btn btn-primary">Kirim Link Reset</button>
+                    <button type="submit" class="btn btn-primary" id="submit-btn" disabled>Kirim Link Reset</button>
                 </div>
             <?= form_close(); ?>
             <div class="text-center mt-3">
@@ -35,5 +44,24 @@
             </div>
         </div>
     </div>
+<script
+  src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+  async
+  defer
+></script>
+<script>
+  function onTurnstileSuccess(token) {
+    console.log("Turnstile success:", token);
+    document.getElementById("submit-btn").disabled = false;
+  }
+  function onTurnstileError(errorCode) {
+    console.error("Turnstile error:", errorCode);
+    document.getElementById("submit-btn").disabled = true;
+  }
+  function onTurnstileExpired() {
+    console.warn("Turnstile token expired");
+    document.getElementById("submit-btn").disabled = true;
+  }
+</script>
 </body>
 </html>

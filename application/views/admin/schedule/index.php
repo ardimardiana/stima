@@ -23,7 +23,8 @@
                             <div class="list-group-item paper-item" data-paper-id="<?= $paper->paper_id; ?>">
                                 <?= htmlspecialchars($paper->judul); ?><br>
                                 <?= ucfirst($paper->author_firstname) ?> <?= ucfirst($paper->author_lastname) ?> <br>
-                                <?= ucfirst($paper->author_affiliation) ?>
+                                <?= ucfirst($paper->author_affiliation) ?> <br>
+                                <strong><?= ucfirst($paper->nama_topik) ?></strong>
                             </div>
                         <?php endforeach; ?>
                     </div>
