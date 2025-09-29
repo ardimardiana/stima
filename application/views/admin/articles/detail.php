@@ -82,7 +82,7 @@
                         </div>
                 </div>
             </div>
-            <?php if(($status == 'rejected' || $status != 'final_submitted')): ?>
+            <?php //if(($status == 'rejected' || $status != 'final_submitted' )): ?>
             <div class="card shadow-sm">
                 <div class="card-header bg-danger text-white"><h5 class="mb-0">Keputusan Final</h5></div>
                 <div class="card-body text-center">
@@ -103,10 +103,21 @@
                                 onclick="return confirm('Anda yakin ingin MENOLAK artikel ini?')">
                             <i class="fas fa-times"></i> Tolak (Reject)
                         </button>
+                        
+                        <hr>
+                        <button type="submit" name="status" value="submitted" class="btn btn-danger"
+                                onclick="return confirm('Anda yakin ingin mengubah status artikel ini?')">
+                            <i class="fas fa-times"></i> Submitted
+                        </button>
+                        
+                        <button type="submit" name="status" value="in_review" class="btn btn-danger"
+                                onclick="return confirm('Anda yakin ingin mengubah status artikel ini?')">
+                            <i class="fas fa-times"></i> in_review
+                        </button>
                     <?= form_close(); ?>
                 </div>
             </div>
-            <?php endif; ?>
+            <?php //endif; ?>
         </div>
 
         

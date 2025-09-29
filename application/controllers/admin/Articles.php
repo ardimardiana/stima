@@ -18,11 +18,13 @@ class Articles extends Admin_Controller {
         $status = $this->input->post('status');
     
         // Validasi input status
+        /*
         if (!in_array($status, ['accepted', 'revision', 'rejected'])) {
             $this->session->set_flashdata('error', 'Aksi tidak valid.');
             redirect('admin/articles/detail/' . $paper_id);
         }
-    
+        */
+        
         // Panggil model untuk update status di database
         if ($this->Article_admin_model->update_article_status($paper_id, $status)) {
             // Jika update berhasil, kirim notifikasi email ke presenter
