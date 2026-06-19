@@ -107,11 +107,11 @@ class Dashboard extends User_Controller {
         // 2. Buat record pembayaran awal di tbl_payments
         $payment_data = [
             'registration_id' => $registration_id,
-            'nomor_invoice' => 'INV-' . $event_id . '-' . $registration_id, // Buat nomor invoice unik
-            'status_pembayaran' => 'menunggu'
+            'status_pembayaran' => 'pending', 
+            'mayar_status'      => 'pending',
         ];
         $this->db->insert('tbl_payments', $payment_data);
-    
+        
         // Selesaikan database transaction
         $this->db->trans_complete();
         

@@ -38,6 +38,10 @@ class Events extends Admin_Controller {
                 'tgl_pengumuman' => $this->input->post('tgl_pengumuman'),
                 'tgl_mulai_acara' => $this->input->post('tgl_mulai_acara'),
                 'tgl_selesai_acara' => $this->input->post('tgl_selesai_acara'),
+                'fee_peserta_umum' => $this->input->post('fee_peserta_umum'),
+                'fee_peserta_mahasiswa' => $this->input->post('fee_peserta_mahasiswa'),
+                'fee_pemakalah_umum' => $this->input->post('fee_pemakalah_umum'),
+                'fee_pemakalah_unma' => $this->input->post('fee_pemakalah_unma'),
                 'slug_url' => $this->input->post('slug_url'),
                 'info_pembayaran' => $this->input->post('info_pembayaran'),
                 'status' => 'draft'
@@ -94,6 +98,10 @@ class Events extends Admin_Controller {
                 'tgl_pengumuman' => $this->input->post('tgl_pengumuman'),
                 'tgl_mulai_acara' => $this->input->post('tgl_mulai_acara'),
                 'tgl_selesai_acara' => $this->input->post('tgl_selesai_acara'),
+                'fee_peserta_umum' => $this->input->post('fee_peserta_umum'),
+                'fee_peserta_mahasiswa' => $this->input->post('fee_peserta_mahasiswa'),
+                'fee_pemakalah_umum' => $this->input->post('fee_pemakalah_umum'),
+                'fee_pemakalah_unma' => $this->input->post('fee_pemakalah_unma'),
                 'slug_url' => $this->input->post('slug_url'),
                 'info_pembayaran' => $this->input->post('info_pembayaran'),
             ];

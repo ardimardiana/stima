@@ -61,6 +61,22 @@
                         <label for="tgl_selesai_acara" class="form-label">Selesai Acara</label>
                         <input type="date" name="tgl_selesai_acara" class="form-control" value="<?= set_value('tgl_selesai_acara', $is_edit ? $event->tgl_selesai_acara : ''); ?>">
                     </div>
+                    <div class="mb-3">
+                        <label for="fee_peserta_umum" class="form-label">Biaya Peserta Umum</label>
+                        <input type="number" name="fee_peserta_umum" class="form-control" value="<?= set_value('fee_peserta_umum', $is_edit ? $event->fee_peserta_umum : ''); ?>">
+                    </div>
+                    <div class="mb-3">
+                        <label for="fee_peserta_mahasiswa" class="form-label">Biaya Peserta Mahasiswa</label>
+                        <input type="number" name="fee_peserta_mahasiswa" class="form-control" value="<?= set_value('fee_peserta_mahasiswa', $is_edit ? $event->fee_peserta_mahasiswa : ''); ?>">
+                    </div>
+                    <div class="mb-3">
+                        <label for="fee_pemakalah_umum" class="form-label">Biaya Pemakalah Umum</label>
+                        <input type="number" name="fee_pemakalah_umum" class="form-control" value="<?= set_value('fee_pemakalah_umum', $is_edit ? $event->fee_pemakalah_umum : ''); ?>">
+                    </div>
+                    <div class="mb-3">
+                        <label for="fee_pemakalah_unma" class="form-label">Biaya Pemakalah UNMA</label>
+                        <input type="number" name="fee_pemakalah_unma" class="form-control" value="<?= set_value('fee_pemakalah_unma', $is_edit ? $event->fee_pemakalah_unma : ''); ?>">
+                    </div>
                 </div>
                  <div class="mb-3">
                     <label for="info_pembayaran" class="form-label">Konten Halaman Utama Event / Info Pembayaran</label>

@@ -178,18 +178,37 @@ class Auth extends CI_Controller {
     
     // Fungsi untuk mengirim email
     private function _send_registration_email($email, $nama) {
-        $config = Array(
-			'mailtype'  => 'html', 
-			'charset'   => 'iso-8859-1'
-		);
-		$this->load->library('email', $config);
-
+        // 1. Tambahkan crlf dan newline
+        $config = array(
+            'mailtype'  => 'html', 
+            'charset'   => 'utf-8', // Boleh juga menggunakan 'utf-8'
+            'wordwrap'  => TRUE,
+            'crlf'      => "\r\n", 
+            'newline'   => "\r\n"
+        );
+    
+        // 2. Load library email
+        $this->load->library('email');
+    
+        // 3. Wajib gunakan initialize agar config benar-benar diterapkan
+        $this->email->initialize($config);
+    
         $this->email->from($_ENV['EMAIL'], $_ENV['PANITIA']);
         $this->email->to($email);
         $this->email->subject('Pendaftaran Akun Berhasil');
-        $this->email->message("Halo {$nama},<br><br>Terima kasih telah mendaftar di sistem manajemen konferensi kami. Akun Anda telah berhasil dibuat.<br><br>Silakan login untuk melanjutkan.<br><br>Hormat kami,<br>Panitia");
-
-        $this->email->send();
+        
+        // Pesan HTML
+        $pesan = "Halo {$nama},<br><br>Terima kasih telah mendaftar di sistem manajemen konferensi kami. Akun Anda telah berhasil dibuat.<br><br>Silakan login untuk melanjutkan.<br><br>Hormat kami,<br>Panitia";
+        
+        $this->email->message($pesan);
+    
+        // 4. Kirim email
+        if ($this->email->send()) {
+            // Berhasil (Bisa kamu beri log/return true)
+        } else {
+            // Jika masih gagal, aktifkan baris di bawah ini untuk melihat pesan error:
+            // show_error($this->email->print_debugger());
+        }
     }
     
     // Fungsi Lupa Password (placeholder)
@@ -261,11 +280,19 @@ class Auth extends CI_Controller {
     
     // Fungsi internal untuk kirim email reset password
     private function _send_reset_password_email($email, $token) {
-        $config = Array(
-			'mailtype'  => 'html', 
-			'charset'   => 'iso-8859-1'
-		);
-		$this->load->library('email', $config);
+        $config = array(
+            'mailtype'  => 'html', 
+            'charset'   => 'utf-8', // Boleh juga menggunakan 'utf-8'
+            'wordwrap'  => TRUE,
+            'crlf'      => "\r\n", 
+            'newline'   => "\r\n"
+        );
+    
+        // 2. Load library email
+        $this->load->library('email');
+    
+        // 3. Wajib gunakan initialize agar config benar-benar diterapkan
+        $this->email->initialize($config);
         
         $reset_link = site_url('auth/reset_password/' . $token);
     

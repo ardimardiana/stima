@@ -18,12 +18,20 @@ class Cron extends CI_Controller {
         echo "Mencoba mengirim " . count($pending_emails) . " email...\n";
         
         foreach ($pending_emails as $mail) {
-            $config = Array(
-    			'mailtype'  => 'html', 
-    			'charset'   => 'iso-8859-1'
-    		);
-    		$this->load->library('email', $config);
-    		$this->email->clear(); // Bersihkan email dari iterasi sebelumnya
+                $config = array(
+                'mailtype'  => 'html', 
+                'charset'   => 'utf-8', // Boleh juga menggunakan 'utf-8'
+                'wordwrap'  => TRUE,
+                'crlf'      => "\r\n", 
+                'newline'   => "\r\n"
+            );
+        
+            // 2. Load library email
+            $this->load->library('email');
+        
+            // 3. Wajib gunakan initialize agar config benar-benar diterapkan
+            $this->email->initialize($config);
+            $this->email->clear(); // Bersihkan email dari iterasi sebelumnya
             $this->email->from('no-reply@stima.unma.ac.id', 'Panitia');
             $this->email->to($mail->recipient_email);
             $this->email->subject($mail->subject);

@@ -3,7 +3,7 @@
     $payment_status = $registration->payment->status_pembayaran;
 ?>
 
-<?php if($payment_status == 'menunggu'): ?>
+<?php if($payment_status == 'pending'): ?>
     <div class="alert alert-warning mb-0">
         <p class="mb-1"><strong>Status Anda:</strong> Menunggu Pembayaran.</p>
         <a href="<?= site_url('user/payment/index/' . $registration->registration_id); ?>" class="btn btn-sm btn-primary mb-2">Lakukan Pembayaran Sekarang</a>
@@ -18,7 +18,7 @@
     <div class="alert alert-info mb-0">
         <p class="mb-0"><strong>Status Anda:</strong> Pembayaran Anda sedang divalidasi oleh panitia. Mohon tunggu.</p>
     </div>
-<?php elseif($payment_status == 'ditolak'): ?>
+<?php elseif($payment_status == 'canceled'): ?>
     <div class="alert alert-danger mb-0">
         <p class="mb-1"><strong>Status Anda:</strong> Pembayaran ditolak. Mohon periksa kembali bukti transfer Anda.</p>
         <a href="<?= site_url('user/payment/index/' . $registration->registration_id); ?>" class="btn btn-sm btn-danger mb-2">Upload Ulang Bukti Bayar</a>
@@ -29,7 +29,7 @@
             Batalkan Pendaftaran
         </a>
     </div>
-<?php elseif($payment_status == 'lunas'): ?>
+<?php elseif($payment_status == 'success'): ?>
     <div class="alert alert-success mb-0">
         <div class="row align-items-center">
             <div class="col-md-3 text-center">
