@@ -1,9 +1,20 @@
 <?php 
     // Ambil data dari variabel yang dikirim
-    $payment_status = $registration->payment->status_pembayaran;
+    $payment_status = $registration->payment->mayar_status;
 ?>
 
-<?php if($payment_status == 'pending'): ?>
+<?php if($payment_status == 'requested'): ?>
+    <div class="alert alert-warning mb-0">
+        <p class="mb-1"><strong>Status Anda:</strong> Lanjutkan Pembayaran.</p>
+        <a href="<?= site_url('user/invoice/index/' . $registration->payment->mayar_invoice_id); ?>" class="btn btn-sm btn-primary mb-2">Lakukan Pembayaran Sekarang</a>
+        
+        <a href="<?= site_url('user/dashboard/cancel_registration/' . $registration->registration_id); ?>" 
+           class="btn btn-sm btn-outline-danger" 
+           onclick="return confirm('Anda yakin ingin membatalkan pendaftaran untuk peran ini?')">
+            Batalkan Pendaftaran
+        </a>
+    </div>
+<?php elseif($payment_status == 'pending'): ?>
     <div class="alert alert-warning mb-0">
         <p class="mb-1"><strong>Status Anda:</strong> Menunggu Pembayaran.</p>
         <a href="<?= site_url('user/payment/index/' . $registration->registration_id); ?>" class="btn btn-sm btn-primary mb-2">Lakukan Pembayaran Sekarang</a>
@@ -29,7 +40,7 @@
             Batalkan Pendaftaran
         </a>
     </div>
-<?php elseif($payment_status == 'success'): ?>
+<?php elseif($payment_status == 'lunas'): ?>
     <div class="alert alert-success mb-0">
         <div class="row align-items-center">
             <div class="col-md-3 text-center">

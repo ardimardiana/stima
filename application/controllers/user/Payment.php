@@ -13,11 +13,18 @@ class Payment extends MY_Controller { // Atau CI_Controller sesuai base controll
             redirect('auth/login');
         }
     }
-
+    
+    function jador()
+    {
+        $payload = json_decode('{"event":"payment.received","data":{"id":"589b8f95-690c-43f3-8c98-80f66b5d34b5","transactionId":"589b8f95-690c-43f3-8c98-80f66b5d34b5","status":"SUCCESS","transactionStatus":"created","createdAt":"2026-06-19T16:10:49.918Z","updatedAt":"2026-06-19T16:11:09.413Z","merchantId":"90e811f8-416d-447d-9014-1e094714074f","merchantName":"Ardi Mardiana ","merchantEmail":"ardimardiana@gmail.com","customerId":"63526eb6-6e71-4ed8-a37f-06513ad94386","customerName":"IT UNMA","customerEmail":"it@unma.ac.id","customerMobile":"000000000000","amount":10000,"paymentLinkAmount":10000,"isAdminFeeBorneByCustomer":null,"isChannelFeeBorneByCustomer":null,"productId":"dcc3c084-704f-46cb-85a1-c55185565cf1","productName":"INVOICE","productDescription":"Biaya Pemakalah UNMA - SEMINAR TEKNOLOGI MAJALENGKA (STIMA) 10 Tahun 2026","productType":"invoice","pixelFbp":null,"pixelFbc":null,"qty":1,"couponUsed":null,"paymentMethod":"QRIS","nettAmount":10000,"extraData":{"noCustomer":"454","idProd":"453"}}}');
+        var_dump($payload);
+    }
+    
     /**
      * Tampilan awal pilihan jenis biaya (Umum / UNMA) + Checkbox Persetujuan Self-Declare
      */
     public function index($registration_id=null) {
+        
         $user_id = $this->session->userdata('user_id');
 
         // 1. Ambil data event yang sedang aktif beserta nominal biayanya
@@ -83,18 +90,18 @@ class Payment extends MY_Controller { // Atau CI_Controller sesuai base controll
         // 1. Tentukan Harga dari 4 Kategori (tbl_events)
         $amount = 0;
         $desc   = '';
-        if ($tipe_kepesertaan == 'Pemakalah' && $tipe_harga == 'Umum') {
+        if ($tipe_kepesertaan == 'presenter' && $tipe_harga == 'Umum') {
             $amount = $event->fee_pemakalah_umum;
-            $desc   = "Biaya Pemakalah Umum - " . $event->title;
-        } elseif ($tipe_kepesertaan == 'Pemakalah' && $tipe_harga == 'UNMA') {
+            $desc   = "Biaya Pemakalah Umum - " . $event->nama_event;
+        } elseif ($tipe_kepesertaan == 'presenter' && $tipe_harga == 'UNMA') {
             $amount = $event->fee_pemakalah_unma;
-            $desc   = "Biaya Pemakalah UNMA - " . $event->title;
-        } elseif ($tipe_kepesertaan == 'Peserta' && $tipe_harga == 'Umum') {
+            $desc   = "Biaya Pemakalah UNMA - " . $event->nama_event;
+        } elseif ($tipe_kepesertaan == 'peserta' && $tipe_harga == 'Umum') {
             $amount = $event->fee_peserta_umum;
-            $desc   = "Biaya Peserta Umum - " . $event->title;
-        } elseif ($tipe_kepesertaan == 'Peserta' && $tipe_harga == 'UNMA') {
+            $desc   = "Biaya Peserta Umum - " . $event->nama_event;
+        } elseif ($tipe_kepesertaan == 'peserta' && $tipe_harga == 'UNMA') {
             $amount = $event->fee_peserta_mahasiswa;
-            $desc   = "Biaya Peserta Mahasiswa - " . $event->title;
+            $desc   = "Biaya Peserta Mahasiswa - " . $event->nama_event;
         }
 
         // ... (Kode pengecekan harga dan set $amount sebelumnya) ...
@@ -128,7 +135,7 @@ class Payment extends MY_Controller { // Atau CI_Controller sesuai base controll
             "mobile"      => $user->phone ?? "000000000000",
             "redirectUrl" => base_url("user/dashboard"),
             "description" => $desc,
-            "expiredAt"   => date("Y-m-d\TH:i:s.000\Z", strtotime('+2 days')),
+            "expiredAt"   => date("Y-m-d\TH:i:s.000\Z", strtotime('+1 days')),
             "items" => [[
                 "quantity"    => 1,
                 "rate"        => (int)$amount,
@@ -139,7 +146,7 @@ class Payment extends MY_Controller { // Atau CI_Controller sesuai base controll
                 "idProd"     => (string)$payment_id // Kunci utama untuk ditangkap Webhook Mayar nanti!
             ]
         ];
-
+        
         // ... (Proses CURL tetap sama seperti kode Anda) ...
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $_ENV['mayar_url'] . '/invoice/create');
@@ -150,7 +157,7 @@ class Payment extends MY_Controller { // Atau CI_Controller sesuai base controll
             'Authorization: Bearer ' . $_ENV['mayar_api'],
             'Content-Type: application/json'
         ]);
-
+        
         $response = curl_exec($ch);
         $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
@@ -161,6 +168,7 @@ class Payment extends MY_Controller { // Atau CI_Controller sesuai base controll
             // 5. Update Database Lokal dengan Data Mayar
             $this->db->where('payment_id', $payment_id);
             $this->db->update('tbl_payments', [
+                'mayar_status'  => 'requested',
                 'mayar_invoice_id' => $res->data->id, // ID asli dari Mayar (bisa dipakai untuk identifikasi/cek API manual)
                 'mayar_link'       => $res->data->link // Link murni untuk dialihkan ke halaman bayar
             ]);
