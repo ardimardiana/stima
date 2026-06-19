@@ -9,6 +9,10 @@
         <li class="nav-item">
           <a class="nav-link <?= ($this->uri->segment(2) == '' || $this->uri->segment(2) == 'view_event') ? 'active' : '' ?>" href="<?= site_url($event->slug_url); ?>">Home</a>
         </li>
+        
+        <li class="nav-item">
+          <a class="nav-link" href="https://icon-stem.unma.ac.id/" target="_blank">ICon-STEM</a>
+        </li>
         <li class="nav-item">
           <a class="nav-link" href="<?=$_ENV['template']?>" target="_blank">Template Artikel</a>
         </li>

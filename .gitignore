@@ -3,6 +3,7 @@
 application/.env
 application/cache/*
 application/config/database.php
+application/config/config.php
 !application/cache/index.html
 
 application/logs/*
