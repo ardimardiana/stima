@@ -14,9 +14,49 @@ class Webhook extends CI_Controller {
         $this->load->database();
     }
 
-    public function mayar_callback() {
-    // 1. Ambil data JSON Raw dari Mayar
+    public function mayar() {
+        
+        // ==========================================
+        // 0. VERIFIKASI WEBHOOK TOKEN
+        // ==========================================
+        
+        // Ambil token dari request header
+        $requestToken = $this->input->get_request_header('X-Callback-Token', TRUE);
+        
+        // Ambil expected token dari Environment Variable
+        $expectedToken = isset($_ENV['mayar_token']) ? $_ENV['mayar_token'] : null;
+    
+        // Cek apakah token di ENV sudah disetting
+        if (!$expectedToken) {
+            log_message('error', '[Mayar Webhook] mayar_token not configured in ENV');
+            http_response_code(500);
+            echo json_encode(["error" => "Webhook configuration error"]);
+            return;
+        }
+    
+        // Cek apakah header X-Callback-Token ada
+        if (!$requestToken) {
+            log_message('error', '[Mayar Webhook] X-Callback-Token header missing');
+            http_response_code(401);
+            echo json_encode(["error" => "Unauthorized: Token missing"]);
+            return;
+        }
+    
+        // Cocokkan token dari header dengan yang ada di ENV
+        if ($requestToken !== $expectedToken) {
+            log_message('error', '[Mayar Webhook] Token mismatch');
+            http_response_code(401);
+            echo json_encode(["error" => "Unauthorized: Invalid token"]);
+            return;
+        }
+        
+        // ==========================================
+        // 1. PROSES PAYLOAD JIKA VERIFIKASI BERHASIL
+        // ==========================================
         $jsonPayload = file_get_contents('php://input');
+        
+        // Simpan Webhook
+        file_put_contents(APPPATH . 'logs/webhook_test.txt', file_get_contents('php://input') . PHP_EOL, FILE_APPEND);
         
         // Gunakan true agar di-decode menjadi Array Asosiatif (lebih aman dan stabil di PHP)
         $payload = json_decode($jsonPayload, true); 
