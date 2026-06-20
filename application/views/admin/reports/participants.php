@@ -30,10 +30,9 @@
                     <label for="filter-pembayaran" class="form-label">Filter Pembayaran</label>
                     <select id="filter-pembayaran" class="form-select filter-select" data-column-index="5">
                         <option value="">Semua Status</option>
-                        <option value="Lunas">Lunas</option>
-                        <option value="Ditolak">Ditolak</option>
-                        <option value="Menunggu">Menunggu</option>
-                        <option value="Validasi">Validasi</option>
+                        <option value="verified">Lunas</option>
+                        <option value="cancelled">Ditolak</option>
+                        <option value="pending">Menunggu</option>
                     </select>
                 </div>
                 <div class="col-md-4">
@@ -70,10 +69,9 @@
                                 <?php 
                                     $payment_status = $p->status_pembayaran;
                                     $badge_class = 'bg-secondary';
-                                    if ($payment_status == 'lunas') $badge_class = 'bg-success';
-                                    else if ($payment_status == 'menunggu') $badge_class = 'bg-info text-dark';
-                                    else if ($payment_status == 'validasi') $badge_class = 'bg-warning text-dark';
-                                    else if ($payment_status == 'ditolak') $badge_class = 'bg-danger';
+                                    if ($payment_status == 'verified') $badge_class = 'bg-success';
+                                    else if ($payment_status == 'pending') $badge_class = 'bg-info text-dark';
+                                    else if ($payment_status == 'cancelled') $badge_class = 'bg-danger';
                                 ?>
                                 <span class="badge <?= $badge_class; ?>"><?= ucfirst($payment_status); ?></span>
                             </td>

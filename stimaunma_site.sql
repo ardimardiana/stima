@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jun 19, 2026 at 04:53 PM
+-- Generation Time: Jun 20, 2026 at 03:04 PM
 -- Server version: 8.0.46
 -- PHP Version: 8.4.21
 
@@ -78,7 +78,11 @@ CREATE TABLE `tbl_events` (
   `tgl_selesai_acara` date DEFAULT NULL,
   `header_loa_path` varchar(255) DEFAULT NULL COMMENT 'Path ke gambar header/kop surat LoA',
   `ketua_panitia` varchar(255) DEFAULT NULL COMMENT 'Nama ketua panitia untuk TTD',
-  `sertifikat_aktif` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=Nonaktif, 1=Aktif'
+  `sertifikat_aktif` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=Nonaktif, 1=Aktif',
+  `fee_pemakalah_umum` int DEFAULT '0',
+  `fee_pemakalah_unma` int DEFAULT '0',
+  `fee_peserta_umum` int DEFAULT '0',
+  `fee_peserta_mahasiswa` int DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -173,13 +177,17 @@ CREATE TABLE `tbl_password_resets` (
 CREATE TABLE `tbl_payments` (
   `payment_id` int NOT NULL,
   `registration_id` int NOT NULL,
-  `nomor_invoice` varchar(50) NOT NULL,
+  `nomor_invoice` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `amount` int DEFAULT NULL,
   `bukti_bayar_path` varchar(255) DEFAULT NULL,
-  `status_pembayaran` enum('menunggu','lunas','ditolak','dibatalkan','validasi') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'validasi',
+  `status_pembayaran` enum('menunggu','lunas','ditolak','dibatalkan','validasi','pending','cancelled','success','verified') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'pending',
   `tgl_unggah` datetime DEFAULT NULL,
   `tgl_validasi` datetime DEFAULT NULL,
   `validator_id` int DEFAULT NULL,
-  `catatan_admin` text
+  `catatan_admin` text,
+  `mayar_invoice_id` varchar(100) DEFAULT NULL,
+  `mayar_link` varchar(255) DEFAULT NULL,
+  `mayar_status` varchar(50) DEFAULT 'pending'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------

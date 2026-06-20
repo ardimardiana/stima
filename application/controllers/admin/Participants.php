@@ -15,7 +15,7 @@ class Participants extends Admin_Controller {
     }
 
     // Menampilkan daftar peserta untuk divalidasi
-    public function index($event_id, $status = 'validasi') {
+    public function index($event_id, $status = 'pending') {
         $data['title'] = 'Validasi Pembayaran';
         $data['event'] = $this->Event_model->get_event_by_id($event_id);
         $data['participants'] = $this->Participant_model->get_participants_by_event($event_id, $status);

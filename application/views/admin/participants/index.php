@@ -9,13 +9,13 @@
 
     <ul class="nav nav-tabs mb-4">
         <li class="nav-item">
-            <a class="nav-link <?= $status_filter == 'validasi' ? 'active' : '' ?>" href="<?= site_url('admin/participants/index/'.$event->event_id.'/validasi') ?>">Menunggu Validasi</a>
+            <a class="nav-link <?= $status_filter == 'pending' ? 'active' : '' ?>" href="<?= site_url('admin/participants/index/'.$event->event_id.'/pending') ?>">Menunggu Pembayaran</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link <?= $status_filter == 'lunas' ? 'active' : '' ?>" href="<?= site_url('admin/participants/index/'.$event->event_id.'/lunas') ?>">Lunas</a>
+            <a class="nav-link <?= $status_filter == 'verified' ? 'active' : '' ?>" href="<?= site_url('admin/participants/index/'.$event->event_id.'/verified') ?>">Lunas</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link <?= $status_filter == 'ditolak' ? 'active' : '' ?>" href="<?= site_url('admin/participants/index/'.$event->event_id.'/ditolak') ?>">Ditolak</a>
+            <a class="nav-link <?= $status_filter == 'cancelled' ? 'active' : '' ?>" href="<?= site_url('admin/participants/index/'.$event->event_id.'/cancelled') ?>">Ditolak</a>
         </li>
     </ul>
 
