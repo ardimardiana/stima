@@ -3,6 +3,21 @@
     .paper-list, .session-papers { min-height: 50px; }
     .paper-item { cursor: grab; background-color: #f8f9fa; border: 1px solid #dee2e6; }
     .session-box { border: 1px dashed #ccc; padding: 10px; }
+    /* --- TAMBAHAN UNTUK STICKY CARD --- */
+    .sticky-sidebar {
+        position: -webkit-sticky; /* Dukungan Safari */
+        position: sticky;
+        top: 80px; /* Jarak dari atas layar, sesuaikan dengan tinggi topbar Anda */
+        max-height: calc(100vh - 100px); /* Batasi tinggi card agar tidak terpotong layar bawah */
+        display: flex;
+        flex-direction: column;
+        z-index: 10;
+    }
+    
+    .sticky-sidebar .card-body {
+        overflow-y: auto; /* Memunculkan scrollbar di dalam card jika artikel banyak */
+        overflow-x: hidden;
+    }
 </style>
 
 <div class="container-fluid px-4">
@@ -15,7 +30,7 @@
     
     <div class="row g-4">
         <div class="col-lg-4">
-            <div class="card shadow-sm">
+            <div class="card shadow-sm sticky-sidebar">
                 <div class="card-header"><h5 class="mb-0"><i class="fas fa-file-alt me-2"></i>Artikel Belum Dijadwalkan</h5></div>
                 <div class="card-body">
                     <div id="unscheduled-papers" class="list-group paper-list">
@@ -45,7 +60,12 @@
                             <?php foreach($schedules[$room->room_id] as $session): ?>
                                 <div class="session-box mb-2">
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <strong><?= date('H:i', strtotime($session->waktu_mulai)); ?> - <?= date('H:i', strtotime($session->waktu_selesai)); ?>: <?= $session->nama_sesi; ?></strong>
+                                        <div>
+                                            <strong><?= date('H:i', strtotime($session->waktu_mulai)); ?> - <?= date('H:i', strtotime($session->waktu_selesai)); ?>: <?= htmlspecialchars($session->nama_sesi); ?></strong>
+                                            <?php if(!empty($session->moderator_id)): ?>
+                                                <br><small class="text-success"><i class="fas fa-user-tie me-1"></i> Moderator: <?= htmlspecialchars($session->mod_depan . ' ' . $session->mod_belakang); ?></small>
+                                            <?php endif; ?>
+                                        </div>
                                         <a href="<?= site_url('admin/schedule/delete_session/'. $session->session_id); ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Anda yakin ingin menghapus sesi ini? Semua paper di dalamnya akan kembali ke daftar \'Belum Dijadwalkan\'.');"
                                            title="Hapus Sesi">
                                             <i class="fas fa-trash"></i>
@@ -82,15 +102,33 @@
             </div>
             <?= form_open('admin/schedule/create_session/' . $event->event_id); ?>
                 <div class="modal-body">
-                    <div class="mb-3"><label class="form-label">Nama Sesi</label><input type="text" name="nama_sesi" class="form-control" required></div>
-                    <div class="mb-3"><label class="form-label">Ruangan</label><select name="room_id" class="form-select" required><?php foreach($rooms as $room): ?><option value="<?= $room->room_id; ?>"><?= $room->nama_ruang; ?></option><?php endforeach; ?></select></div>
+                    <div class="mb-3">
+                        <label class="form-label">Nama Sesi</label>
+                        <input type="text" name="nama_sesi" class="form-control" placeholder="Contoh: Sesi Paralel A / Plenary Session" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Moderator Sesi (Opsional)</label>
+                        <select name="moderator_id" class="form-select">
+                            <option value="">-- Tanpa Moderator / Atur Nanti --</option>
+                            <?php foreach($admins as $admin): ?>
+                                <option value="<?= $admin->user_id; ?>">
+                                    <?= htmlspecialchars($admin->nama_depan . ' ' . $admin->nama_belakang); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Ruangan</label>
+                        <select name="room_id" class="form-select" required>
+                            <?php foreach($rooms as $room): ?>
+                                <option value="<?= $room->room_id; ?>"><?= $room->nama_ruang; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
                     <div class="row">
                         <div class="col"><label class="form-label">Waktu Mulai</label><input type="datetime-local" name="waktu_mulai" class="form-control" required></div>
                         <div class="col"><label class="form-label">Waktu Selesai</label><input type="datetime-local" name="waktu_selesai" class="form-control" required></div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Simpan Sesi</button>
                 </div>
             <?= form_close(); ?>
         </div>

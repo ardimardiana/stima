@@ -1,6 +1,11 @@
 <?php
 class User_model extends CI_Model {
     
+    public function get_admins() {
+        $this->db->where('peran_sistem', 'admin');
+        return $this->db->get('tbl_users')->result();
+    }
+    
     // Tambahkan fungsi ini di User_model.php
     public function check_existing_registration($user_id, $event_id, $peran) {
         $this->db->where('user_id', $user_id);

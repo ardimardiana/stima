@@ -8,14 +8,18 @@ class Schedule extends Admin_Controller {
         $this->load->model('Schedule_model');
         $this->load->model('Event_model');
         $this->load->model('Room_model');
+        $this->load->model('User_model');
     }
 
-    // Menampilkan halaman utama penjadwalan
     public function index($event_id) {
         $data['title'] = 'Manajemen Jadwal';
         $data['event'] = $this->Event_model->get_event_by_id($event_id);
         $data['rooms'] = $this->Room_model->get_by_event($event_id);
         $data['unscheduled_papers'] = $this->Schedule_model->get_unscheduled_papers($event_id);
+        
+        // Tambahan: Mengambil data admin untuk dropdown moderator
+        $data['admins'] = $this->User_model->get_admins();
+
         $sessions_raw = $this->Schedule_model->get_sessions_with_papers($event_id);
         $schedules_by_room = [];
         foreach($sessions_raw as $session) {
@@ -28,12 +32,12 @@ class Schedule extends Admin_Controller {
         $this->load->view('admin/_partials/_footer');
     }
 
-    // Aksi untuk membuat sesi baru (dari modal)
     public function create_session($event_id) {
         $data = [
             'event_id' => $event_id,
             'room_id' => $this->input->post('room_id'),
-            'nama_sesi' => $this->input->post('nama_sesi'),
+            'nama_sesi' => $this->input->post('nama_sesi'), // Tetap string teks biasa
+            'moderator_id' => $this->input->post('moderator_id') ? $this->input->post('moderator_id') : NULL, // Menyimpan ID user
             'waktu_mulai' => $this->input->post('waktu_mulai'),
             'waktu_selesai' => $this->input->post('waktu_selesai'),
         ];

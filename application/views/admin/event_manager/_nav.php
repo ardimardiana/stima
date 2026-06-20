@@ -75,4 +75,10 @@
            <i class="fas fa-bullhorn me-1"></i> Pengumuman
         </a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link <?= ($this->uri->segment(2) == 'moderator') ? 'active' : '' ?>" 
+           href="<?= site_url('admin/moderator/index/' . $event->event_id) ?>">
+           <i class="fas fa-bullhorn me-1"></i> Moderator
+        </a>
+    </li>
 </ul>

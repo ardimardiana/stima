@@ -50,33 +50,20 @@ class Schedule_model extends CI_Model {
         return $schedule_by_day_room;
     }
     
-    /**
-     * Menghapus satu sesi dari jadwal.
-     * @param int $session_id
-     * @return bool
-     */
     public function delete_session($session_id) {
         return $this->db->delete('tbl_sessions', ['session_id' => $session_id]);
     }
     
-    /**
-     * Menghapus/melepas satu paper dari jadwal.
-     * @param int $paper_id
-     * @return bool
-     */
     public function remove_paper_from_schedule($paper_id) {
         return $this->db->delete('tbl_scheduled_papers', ['paper_id' => $paper_id]);
     }
 
-    // Mengambil artikel yang belum dijadwalkan
     public function get_unscheduled_papers($event_id) {
         $subquery = $this->db->select('paper_id')->from('tbl_scheduled_papers sp')
                              ->join('tbl_sessions s', 'sp.session_id = s.session_id')
                              ->where('s.event_id', $event_id)
                              ->get_compiled_select();
-        // -- PERUBAHAN DIMULAI DI SINI --
     
-        // 1. Tambahkan kolom penulis dan afiliasi ke SELECT
         $this->db->select('
             p.paper_id, 
             p.judul, 
@@ -89,30 +76,27 @@ class Schedule_model extends CI_Model {
         $this->db->from('tbl_papers p');
         $this->db->join('tbl_topics c', 'c.topic_id = p.topic_id');
         $this->db->join('tbl_event_registrations er', 'p.registration_id = er.registration_id');
-        
-        // 2. Tambahkan JOIN ke tabel authors
         $this->db->join('tbl_authors a', 'p.paper_id = a.paper_id');
         
         $this->db->where('er.event_id', $event_id);
         $this->db->where_in('p.status_artikel', ['accepted', 'final_submitted']);
-    
-        // 3. Tambahkan WHERE untuk filter hanya corresponding author
         $this->db->where('a.is_corresponding_author', 1);
-    
-        // -- AKHIR PERUBAHAN --       
+     
         if (!empty($this->db->query($subquery)->result())) {
             $this->db->where("p.paper_id NOT IN ($subquery)", NULL, FALSE);
         }
         return $this->db->get()->result();
     }
 
-    // Mengambil semua sesi beserta paper di dalamnya
+    // UPDATE: Ambil semua sesi beserta data relasi nama moderatornya
     public function get_sessions_with_papers($event_id) {
-        // 1. Ambil semua sesi
-        $this->db->where('event_id', $event_id)->order_by('waktu_mulai', 'ASC');
-        $sessions = $this->db->get('tbl_sessions')->result();
+        $this->db->select('s.*, u.nama_depan as mod_depan, u.nama_belakang as mod_belakang');
+        $this->db->from('tbl_sessions s');
+        $this->db->join('tbl_users u', 's.moderator_id = u.user_id', 'left');
+        $this->db->where('s.event_id', $event_id);
+        $this->db->order_by('s.waktu_mulai', 'ASC');
+        $sessions = $this->db->get()->result();
 
-        // 2. Untuk setiap sesi, ambil paper yang ada di dalamnya
         foreach ($sessions as $session) {
             $this->db->select('sp.paper_id, p.judul')
                      ->from('tbl_scheduled_papers sp')
@@ -124,21 +108,36 @@ class Schedule_model extends CI_Model {
         return $sessions;
     }
 
-    // Fungsi untuk menyimpan sesi baru
     public function insert_session($data) {
         return $this->db->insert('tbl_sessions', $data);
     }
     
-    // Fungsi untuk meng-assign paper ke sebuah sesi (INSERT baru)
     public function assign_paper_to_session($paper_id, $session_id) {
-        // Cek dulu agar tidak duplikat
         $exists = $this->db->get_where('tbl_scheduled_papers', ['paper_id' => $paper_id])->num_rows() > 0;
-        if($exists) return false; // Sudah pernah di-assign ke sesi lain
+        if($exists) return false;
 
-        // Hapus dari sesi lain jika ada (untuk operasi pemindahan)
         $this->db->delete('tbl_scheduled_papers', ['paper_id' => $paper_id]);
 
         $data = ['session_id' => $session_id, 'paper_id' => $paper_id];
         return $this->db->insert('tbl_scheduled_papers', $data);
+    }
+
+    // UPDATE: Query pencarian paper berdasarkan moderator_id
+    public function get_papers_by_moderator($user_id, $event_id) {
+        $this->db->select('p.*, s.nama_sesi, s.waktu_mulai, r.nama_ruang, a.nama_depan as author_firstname, a.nama_belakang as author_lastname, c.nama_topik');
+        $this->db->from('tbl_papers p');
+        $this->db->join('tbl_scheduled_papers sp', 'p.paper_id = sp.paper_id');
+        $this->db->join('tbl_sessions s', 'sp.session_id = s.session_id');
+        $this->db->join('tbl_rooms r', 's.room_id = r.room_id');
+        $this->db->join('tbl_event_registrations er', 'p.registration_id = er.registration_id');
+        $this->db->join('tbl_topics c', 'p.topic_id = c.topic_id');
+        $this->db->join('tbl_authors a', 'p.paper_id = a.paper_id');
+        
+        $this->db->where('er.event_id', $event_id);
+        $this->db->where('s.moderator_id', $user_id); 
+        $this->db->where('a.is_corresponding_author', 1);
+        $this->db->order_by('s.waktu_mulai', 'ASC');
+        
+        return $this->db->get()->result();
     }
 }
